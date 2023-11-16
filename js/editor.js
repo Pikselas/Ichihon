@@ -15,8 +15,8 @@ class Draggable {
         this.drag_element.addEventListener("mousemove", this.drag_handler);
     }
     onDrag(offset_x, offset_y, event) {
-        this.drag_element.style.left = (event.pageX - offset_x) + "px";
-        this.drag_element.style.top = (event.pageY - offset_y) + "px";
+        this.drag_element.style.left = (event.pageX - offset_x) - 10 + "px";
+        this.drag_element.style.top = (event.pageY - offset_y) - 10 + "px";
     }
     onDragEnd() {
         this.drag_element.removeEventListener("mousemove", this.drag_handler);
@@ -28,18 +28,53 @@ class Draggable {
         this.drag_element.removeEventListener("mouseup", this.drag_end);
     }
 }
+class Tool {
+    tool;
+    constructor(src, name) {
+        this.tool = document.createElement("img");
+        this.tool.src = src;
+        this.tool.title = name;
+        this.tool.className = "tool";
+    }
+    setName(title) {
+        this.tool.title = title;
+    }
+    getTool() {
+        return this.tool;
+    }
+    get OnClick() {
+        return this.tool.onclick;
+    }
+}
+class Toolbar {
+    toolbar;
+    constructor() {
+        const toolbar = document.createElement("div");
+        toolbar.className = "toolbar";
+        this.toolbar = toolbar;
+    }
+    addTool(tool) {
+        this.toolbar.appendChild(tool.getTool());
+    }
+    getToolbar() {
+        return this.toolbar;
+    }
+}
 class Panel extends Draggable {
     panel;
     toolbar;
     constructor() {
         const panel = document.createElement("div");
-        const toolbar = document.createElement("div");
-        super(toolbar, panel);
+        const toolbar = new Toolbar();
+        super(toolbar.getToolbar(), panel);
         this.panel = panel;
         this.toolbar = toolbar;
         this.panel.className = "panel";
-        this.toolbar.className = "toolbar";
-        this.panel.appendChild(this.toolbar);
+        this.panel.appendChild(this.toolbar.getToolbar());
+        this.toolbar.addTool(new Tool("./media/plus-small.png", "Add Item"));
+        this.toolbar.addTool(new Tool("./media/plus-small.png", "Remove Item"));
+        this.toolbar.addTool(new Tool("./media/plus-small.png", "Add Item"));
+        //this.toolbar.addTool(new Tool("./media/plus-small.png","Remove Item"));
     }
     setPosition(x, y) {
         this.panel.style.left = x + "px";
@@ -49,9 +84,9 @@ class Panel extends Draggable {
         return this.panel;
     }
     close() {
-        //this.clear();
+        this.clear();
         this.panel.remove();
-        this.toolbar.remove();
+        this.toolbar.getToolbar().remove();
         this.panel = null;
         this.toolbar = null;
     }

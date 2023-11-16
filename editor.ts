@@ -21,8 +21,8 @@ class Draggable
    }
    private onDrag(offset_x:number , offset_y:number, event:MouseEvent): void
    {
-     this.drag_element.style.left = (event.pageX - offset_x) + "px";
-     this.drag_element.style.top = (event.pageY - offset_y) + "px";
+     this.drag_element.style.left = (event.pageX - offset_x) - 10 + "px";
+     this.drag_element.style.top = (event.pageY - offset_y) - 10 + "px";
    }
    private onDragEnd(): void
    {
@@ -37,20 +37,68 @@ class Draggable
    }
 }
 
-class Panel extends Draggable
+class Tool
 {
-   private panel: HTMLDivElement;
+   private tool: HTMLImageElement;
+   constructor(src: string , name: string)
+   {
+      this.tool = document.createElement("img");
+      this.tool.src = src;
+      this.tool.title = name;
+      this.tool.className = "tool";
+   }
+   public setName(title: string): void
+   {
+      this.tool.title = title;
+   }
+   public getTool (): HTMLElement
+   {
+      return this.tool;
+   }
+   get OnClick(): any
+   {
+      return this.tool.onclick;
+   }
+}
+
+class Toolbar
+{
    private toolbar: HTMLDivElement;
    constructor()
    {
-      const panel = document.createElement("div");
       const toolbar = document.createElement("div");
-      super(toolbar,panel);
+      toolbar.className = "toolbar";
+      this.toolbar = toolbar;
+   }
+   public addTool(tool: Tool): void
+   {
+      this.toolbar.appendChild(tool.getTool());
+   }
+   public getToolbar(): HTMLDivElement
+   {
+      return this.toolbar;
+   }
+
+}
+
+class Panel extends Draggable
+{
+   private panel: HTMLDivElement;
+   private toolbar: Toolbar
+   constructor()
+   {
+      const panel = document.createElement("div");
+      const toolbar = new Toolbar();
+      super(toolbar.getToolbar(),panel);
       this.panel = panel;
-      this.toolbar = toolbar
+      this.toolbar = toolbar;
       this.panel.className = "panel";
-      this.toolbar.className = "toolbar";
-      this.panel.appendChild(this.toolbar);
+      this.panel.appendChild(this.toolbar.getToolbar());
+
+      this.toolbar.addTool(new Tool("./media/plus-small.png","Add Item"));
+      this.toolbar.addTool(new Tool("./media/plus-small.png","Remove Item"));
+      this.toolbar.addTool(new Tool("./media/plus-small.png","Add Item"));
+      //this.toolbar.addTool(new Tool("./media/plus-small.png","Remove Item"));
    }
    public setPosition(x: number, y: number): void
    {
@@ -63,9 +111,9 @@ class Panel extends Draggable
    }
    public close(): void
    {
-      //this.clear();
+      this.clear();
       this.panel.remove();
-      this.toolbar.remove();
+      this.toolbar.getToolbar().remove();
 
       this.panel = null;
       this.toolbar = null;

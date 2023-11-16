@@ -13,19 +13,48 @@ body
     width: 400px;
     height: 400px;
     position: absolute;
-    border: 2px solid #1a0030;
+    border: 2px solid #a100be;
+    /*border-top: none; */
     border-radius: 10px;
-    background-color: #4100594e;
+    background-color: #48006238;
     resize: both;
     overflow: auto;
+    box-shadow: 0px 0px 10px 0px #000000;
 }
 
 .panel .toolbar
 {
-    width: 100%;
-    height: 20px;
-    background-color: #1a0030;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    width: 70px;
+    height: 100px;
+    /* background: linear-gradient(-45deg, rgb(0, 251, 255), rgb(72, 1, 96)) ; */
+    background-color: rgba(160, 28, 208, 0.329);
+    border: 2px solid rgb(0, 255, 229);
+    border-radius: 10px;
+    position: relative;
+    top: 10px;
+    left: 10px;
     cursor: move;
+    opacity: 0;
+    align-items: center;
+    align-content: space-evenly;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 5px;
+    margin-top: -5px;
+    transition: all 0.1s ease-in-out;
+}
+
+.panel .toolbar .tool
+{
+    border-radius: 5px;
+    border: 2px solid rgb(220, 24, 255);
+    padding: 2px;
+    background-color: #220047;
+    overflow: auto;
+}
+
+.panel:hover .toolbar
+{
+    opacity: 1;
 }
