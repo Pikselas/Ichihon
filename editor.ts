@@ -3,40 +3,49 @@ class Draggable
 {
    private drag_element: HTMLElement;
    private drag_handler: any;
+   
    private drag_start: any;
    private drag_end: any;
+  
    private offset_x: number;
    private offset_y: number;
+   
+   private base_pos_x: number;
+   private base_pos_y: number;
+   
    constructor (capture_element: HTMLElement , target_element: HTMLElement , offset_x: number = 0, offset_y: number = 0)
    {
       this.drag_element = target_element;
+      
       this.drag_start = this.onDragStart.bind(this);
       this.drag_end = this.onDragEnd.bind(this);
-
+      
       this.offset_x = offset_x;
       this.offset_y = offset_y;
-      
+
       capture_element.addEventListener("mousedown", this.drag_start);
       capture_element.addEventListener("mouseup", this.drag_end);
    }
    private onDragStart(event: any): void
    {
-      this.drag_handler = this.onDrag.bind(this,event.layerX + this.offset_x, event.layerY + this.offset_y);
-      this.drag_element.addEventListener("mousemove", this.drag_handler);
+      this.base_pos_x = this.drag_element.offsetLeft;
+      this.base_pos_y = this.drag_element.offsetTop; 
+      this.drag_handler = this.onDrag.bind(this,event.pageX ,event.pageY );
+      document.body.addEventListener("mousemove", this.drag_handler);
    }
-   private onDrag(offset_x:number , offset_y:number, event:MouseEvent): void
+   private onDrag(offset_x:number , offset_y:number, event:any): void
    {
-     this.drag_element.style.left = (event.pageX - offset_x) + "px";
-     this.drag_element.style.top = (event.pageY - offset_y) + "px";
+     this.drag_element.style.left = this.base_pos_x + (event.pageX - offset_x) + "px";
+     this.drag_element.style.top = this.base_pos_y + (event.pageY - offset_y) + "px";
    }
    private onDragEnd(): void
    {
-      this.drag_element.removeEventListener("mousemove", this.drag_handler);
+      document.body.removeEventListener("mousemove", this.drag_handler);
       this.drag_handler = null;
    }
    public clear(): void
    {
-      this.drag_element.removeEventListener("mousemove", this.drag_handler);
+      document.body.removeEventListener("mousemove", this.drag_handler);
       this.drag_element.removeEventListener("mousedown", this.drag_start);
       this.drag_element.removeEventListener("mouseup", this.drag_end);
    }
@@ -66,12 +75,13 @@ class Tool
    }
 }
 
-class Toolbar
+class Toolbar //extends Draggable
 {
    private toolbar: HTMLDivElement;
    constructor()
    {
       const toolbar = document.createElement("div");
+      //super(toolbar,toolbar,0,0);
       toolbar.className = "toolbar";
       this.toolbar = toolbar;
    }
@@ -116,7 +126,7 @@ class Panel extends Draggable
    }
    public close(): void
    {
-      this.clear();
+      //this.clear();
       this.panel.remove();
       this.toolbar.getToolbar().remove();
 

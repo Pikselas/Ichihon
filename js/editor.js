@@ -5,6 +5,8 @@ class Draggable {
     drag_end;
     offset_x;
     offset_y;
+    base_pos_x;
+    base_pos_y;
     constructor(capture_element, target_element, offset_x = 0, offset_y = 0) {
         this.drag_element = target_element;
         this.drag_start = this.onDragStart.bind(this);
@@ -15,19 +17,21 @@ class Draggable {
         capture_element.addEventListener("mouseup", this.drag_end);
     }
     onDragStart(event) {
-        this.drag_handler = this.onDrag.bind(this, event.layerX + this.offset_x, event.layerY + this.offset_y);
-        this.drag_element.addEventListener("mousemove", this.drag_handler);
+        this.base_pos_x = this.drag_element.offsetLeft;
+        this.base_pos_y = this.drag_element.offsetTop;
+        this.drag_handler = this.onDrag.bind(this, event.pageX, event.pageY);
+        document.body.addEventListener("mousemove", this.drag_handler);
     }
     onDrag(offset_x, offset_y, event) {
-        this.drag_element.style.left = (event.pageX - offset_x) + "px";
-        this.drag_element.style.top = (event.pageY - offset_y) + "px";
+        this.drag_element.style.left = this.base_pos_x + (event.pageX - offset_x) + "px";
+        this.drag_element.style.top = this.base_pos_y + (event.pageY - offset_y) + "px";
     }
     onDragEnd() {
-        this.drag_element.removeEventListener("mousemove", this.drag_handler);
+        document.body.removeEventListener("mousemove", this.drag_handler);
         this.drag_handler = null;
     }
     clear() {
-        this.drag_element.removeEventListener("mousemove", this.drag_handler);
+        document.body.removeEventListener("mousemove", this.drag_handler);
         this.drag_element.removeEventListener("mousedown", this.drag_start);
         this.drag_element.removeEventListener("mouseup", this.drag_end);
     }
@@ -50,10 +54,12 @@ class Tool {
         return this.tool.onclick;
     }
 }
-class Toolbar {
+class Toolbar //extends Draggable
+ {
     toolbar;
     constructor() {
         const toolbar = document.createElement("div");
+        //super(toolbar,toolbar,0,0);
         toolbar.className = "toolbar";
         this.toolbar = toolbar;
     }
@@ -88,7 +94,7 @@ class Panel extends Draggable {
         return this.panel;
     }
     close() {
-        this.clear();
+        //this.clear();
         this.panel.remove();
         this.toolbar.getToolbar().remove();
         this.panel = null;
