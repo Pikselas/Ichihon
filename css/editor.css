@@ -34,7 +34,6 @@ body
     display: flex;
     flex-wrap: wrap;
     column-gap: 5px;
-    transition: all 0.1s ease-in-out;
 }
 
 .toolbar .tool
@@ -56,16 +55,46 @@ body
 {
     opacity: 0;
     top: 10px;
-    left: -70px;
+    left: 10px;
     width: 70px;
     height: 100px;
     cursor: move;
     position: relative;
-    transition: all 0.1s ease-in-out;
+    animation: panel_toolbar_slide_back 0.5s ease-in-out;
+    animation-fill-mode: forwards;
 }
 
 .panel:hover .toolbar
 {
-    left: 10px;
-    opacity: 1;
+    animation: panel_toolbar_slide_forward 0.5s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+
+@keyframes panel_toolbar_slide_forward
+{
+    from
+    {
+        opacity: 0;
+        left: -70px;
+    }
+    to
+    {
+        opacity: 1;
+        left: CURRENT_POSITION
+    }
+}
+
+@keyframes panel_toolbar_slide_back
+{
+    from
+    {
+        opacity: 1;
+        left: CURRENT_POSITION
+    }
+    to
+    {
+        opacity: 0;
+        left: -70px;
+    }
 }

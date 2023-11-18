@@ -3,20 +3,27 @@ class Draggable {
     drag_handler;
     drag_start;
     drag_end;
-    offset_x;
-    offset_y;
     base_pos_x;
     base_pos_y;
-    constructor(capture_element, target_element, offset_x = 0, offset_y = 0) {
+    static MouseButton = {
+        LEFT: 0,
+        MIDDLE: 1,
+        RIGHT: 2
+    };
+    action_key;
+    constructor(capture_element, target_element, action_key = Draggable.MouseButton.LEFT) {
+        this.action_key = action_key;
         this.drag_element = target_element;
         this.drag_start = this.onDragStart.bind(this);
         this.drag_end = this.onDragEnd.bind(this);
-        this.offset_x = offset_x;
-        this.offset_y = offset_y;
         capture_element.addEventListener("mousedown", this.drag_start);
-        capture_element.addEventListener("mouseup", this.drag_end);
+        document.body.addEventListener("mouseup", this.drag_end);
     }
     onDragStart(event) {
+        if (event.button != this.action_key)
+            return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
         this.base_pos_x = this.drag_element.offsetLeft;
         this.base_pos_y = this.drag_element.offsetTop;
         this.drag_handler = this.onDrag.bind(this, event.pageX, event.pageY);
@@ -33,7 +40,7 @@ class Draggable {
     clear() {
         document.body.removeEventListener("mousemove", this.drag_handler);
         this.drag_element.removeEventListener("mousedown", this.drag_start);
-        this.drag_element.removeEventListener("mouseup", this.drag_end);
+        document.body.removeEventListener("mouseup", this.drag_end);
     }
 }
 class Tool {
@@ -54,12 +61,11 @@ class Tool {
         return this.tool.onclick;
     }
 }
-class Toolbar //extends Draggable
- {
+class Toolbar extends Draggable {
     toolbar;
     constructor() {
         const toolbar = document.createElement("div");
-        //super(toolbar,toolbar,0,0);
+        super(toolbar, toolbar, Draggable.MouseButton.LEFT);
         toolbar.className = "toolbar";
         this.toolbar = toolbar;
     }
@@ -76,7 +82,7 @@ class Panel extends Draggable {
     constructor() {
         const panel = document.createElement("div");
         const toolbar = new Toolbar();
-        super(toolbar.getToolbar(), panel, 10, 10);
+        super(toolbar.getToolbar(), panel, Draggable.MouseButton.MIDDLE);
         this.panel = panel;
         this.toolbar = toolbar;
         this.panel.className = "panel";
