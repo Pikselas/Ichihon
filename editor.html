@@ -11,11 +11,16 @@
     <script>
         const editor = new Editor(document.body);
         const panel = new Panel();
-        const panel2 = new Panel();
-        panel.setPosition(250 , 250);
-        panel2.setPosition(500 , 500);
+        
+        panel.setPosition(350 , 250);
+        
+        const media1 = new ImageObject("///D:/CoderWallp/19132949_p0.jpg");
+        const media2 = new ImageObject("///D:/CoderWallp/13534647_p0.jpg");
+
+        panel.addMediaObject(media1);
+        panel.addMediaObject(media2);
+
         editor.add(panel);
-        //editor.add(panel2);
     </script>
 </body>
 </html>

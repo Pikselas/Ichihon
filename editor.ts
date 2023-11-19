@@ -1,4 +1,35 @@
 
+class MediaObject
+{
+   private media_object: HTMLElement;
+   protected constructor(media_object: HTMLElement)
+   {
+      this.media_object = media_object;
+      this.media_object.className = "media_object";
+   }
+   public getMediaObject(): HTMLElement
+   {
+      return this.media_object;
+   }
+}
+
+class ImageObject extends MediaObject
+{
+   constructor(image_object: HTMLImageElement | string)
+   {
+      if(typeof image_object === "string")
+      {
+         const image = document.createElement("img");
+         image.src = image_object;
+         super(image);
+      }
+      else
+      {
+         super(image_object);
+      }
+   }
+}
+
 class Draggable
 {
    private drag_element: HTMLElement;
@@ -104,27 +135,36 @@ class Toolbar extends Draggable
 
 class Panel extends Draggable
 {
+   private toolbar: Toolbar;
    private panel: HTMLDivElement;
-   private toolbar: Toolbar
+   private media_container: HTMLDivElement;
+
    constructor()
    {
       const panel = document.createElement("div");
       const toolbar = new Toolbar();
-      super(toolbar.getToolbar(),panel , Draggable.MouseButton.MIDDLE);
+      super(toolbar.getToolbar(),panel , Draggable.MouseButton.RIGHT);
       this.panel = panel;
       this.toolbar = toolbar;
       this.panel.className = "panel";
       this.panel.appendChild(this.toolbar.getToolbar());
+      
+      this.media_container = document.createElement("div");
+      this.media_container.className = "media_container";
+      this.panel.appendChild(this.media_container);
 
       this.toolbar.addTool(new Tool("./media/plus-small.png","Add Item"));
       this.toolbar.addTool(new Tool("./media/color.png","Change Color"));
       this.toolbar.addTool(new Tool("./media/plus-small.png","Add Item"));
-      //this.toolbar.addTool(new Tool("./media/plus-small.png","Remove Item"));
    }
    public setPosition(x: number, y: number): void
    {
       this.panel.style.left = x + "px";
       this.panel.style.top = y + "px";
+   }
+   public addMediaObject(media: MediaObject): void
+   {
+      this.media_container.appendChild(media.getMediaObject());
    }
    public getPanel(): HTMLDivElement
    {
