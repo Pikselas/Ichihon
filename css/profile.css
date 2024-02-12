@@ -1,0 +1,93 @@
+body
+{
+    background-color: #190020;
+}
+
+.profile_frame
+{
+    width: 400px;
+    height: 500px;
+    position: absolute;
+    top: calc(50% - 200px);
+    left: calc(50% - 250px);
+    box-shadow: 0px 0px 50px 0px #110015;
+}
+
+.profile_frame img
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 10px;
+    /* background: linear-gradient(-24deg, rgb(40, 3, 71) 65%,rgba(140, 59, 207, 0.986) 65%, rgba(40, 3, 71, 0) 67%); */
+}
+
+.profile_design
+{
+    width: calc(100% - 20px);
+    height: calc(100% - 10px);
+    border-radius: 10px;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    background: linear-gradient(-24deg, rgba(13, 1, 24, 0.933) 40%,rgba(83, 14, 126, 0.596) 50%, rgba(40, 3, 71, 0) 57%);
+}
+
+.profile_design .profile_pic
+{
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 40%;
+    left: 5%;
+    /* left: calc(50% - 75px); */
+    border-radius: 50%;
+    /* background-color: #6f0a7f7e; */
+    box-shadow: 0px 0px 20px 0px #490068;
+    border: 2px double #110015;
+}
+
+.profile_design .title
+{
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    width: 50%;
+    height: 15%;
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Courier New', Courier, monospace;
+    color: #d097ffe2;
+    background-color: #190020;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.profile_design .explore_btn
+{
+    width: 300px;
+    height: 60px;
+    position: absolute;
+    bottom: 5%;
+    left: calc(50% - 150px);
+    border-radius: 50px;
+    text-align: center;
+    color: rgb(238, 180, 255);
+    border: none;
+    background-color: #701ca400;
+    border: 2px solid #8b41f2;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-family: fantasy;
+    font-weight: bold;
+    font-size: medium;
+}
+
+.profile_design .explore_btn:hover
+{
+    background-color: #8b41f2;
+}

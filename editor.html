@@ -5,22 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>One-Book</title>
     <link rel="stylesheet" href="css/editor.css">
+    <link rel="stylesheet" href="css/file_explorer.css">
     <script src="js/editor.js"></script>
+    <script src="js/main.js"></script>
 </head>
 <body>
     <script>
-        const editor = new Editor(document.body);
-        const panel = new Panel();
-        
-        panel.setPosition(350 , 250);
-        
-        const media1 = new ImageObject("///D:/CoderWallp/19132949_p0.jpg");
-        const media2 = new ImageObject("///D:/CoderWallp/13534647_p0.jpg");
-
-        panel.addMediaObject(media1);
-        panel.addMediaObject(media2);
-
-        editor.add(panel);
+        SetUpEditor(document.body);
     </script>
 </body>
 </html>
