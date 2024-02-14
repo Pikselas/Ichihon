@@ -1,3 +1,9 @@
+@font-face 
+{
+    font-family: "modern-sans-serif";
+    src: url("../fonts/modern-sans-serif.ttf");
+}
+
 .FileBrowserWindow
 {
     width: 500px;

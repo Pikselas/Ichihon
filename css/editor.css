@@ -25,6 +25,7 @@ body
 
 .toolbar
 {
+    position: relative;
     background-color: #0C0230D1;
     border-radius: 10px;
     align-items: center;
