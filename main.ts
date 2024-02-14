@@ -49,14 +49,16 @@ class LinkLine
 
     private updateLinkLine()
     {
-        this.link_line_svg.setAttribute("width" , this.link_line_svg.parentElement.offsetHeight.toString());
-        this.link_line_svg.setAttribute("height" , this.link_line_svg.parentElement.offsetWidth.toString());
+        this.link_line_svg.setAttribute("width" , document.documentElement.scrollWidth.toString());
+        this.link_line_svg.setAttribute("height" , document.documentElement.scrollHeight.toString());
 
-        this.link_line.setAttribute("x1" , this.linkable1.getBoundingClientRect().left.toString());
-        this.link_line.setAttribute("y1" , this.linkable1.getBoundingClientRect().top.toString());
+        console.log(document.documentElement.scrollLeft ,  this.linkable1.getBoundingClientRect().left , document.documentElement.scrollTop + this.linkable1.getBoundingClientRect().top);
 
-        this.link_line.setAttribute("x2" , this.linkable2.getBoundingClientRect().left.toString());
-        this.link_line.setAttribute("y2" , this.linkable2.getBoundingClientRect().top.toString());
+        this.link_line.setAttribute("x1" , (document.documentElement.scrollLeft +  this.linkable1.getBoundingClientRect().left).toString());
+        this.link_line.setAttribute("y1" , (document.documentElement.scrollTop + this.linkable1.getBoundingClientRect().top).toString());
+
+        this.link_line.setAttribute("x2" , (document.documentElement.scrollLeft + this.linkable2.getBoundingClientRect().left).toString());
+        this.link_line.setAttribute("y2" , (document.documentElement.scrollTop + this.linkable2.getBoundingClientRect().top).toString());
     }
 
     public getLinkLine()
