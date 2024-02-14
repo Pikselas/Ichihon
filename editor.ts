@@ -115,10 +115,10 @@ class Tool
 class Toolbar extends Draggable
 {
    private toolbar: HTMLDivElement;
-   constructor()
+   constructor(drag_key: number = Draggable.MouseButton.LEFT)
    {
       const toolbar = document.createElement("div");
-      super(toolbar,toolbar , Draggable.MouseButton.LEFT);
+      super(toolbar,toolbar , drag_key);
       toolbar.className = "toolbar";
       this.toolbar = toolbar;
    }
@@ -129,6 +129,14 @@ class Toolbar extends Draggable
    public getToolbar(): HTMLDivElement
    {
       return this.toolbar;
+   }
+   public setWidth(width: number): void
+   {
+      this.toolbar.style.width = width + "px";
+   }
+   public setHeight(height: number): void
+   {
+      this.toolbar.style.height = height + "px";
    }
 
 }
@@ -143,8 +151,8 @@ class Panel extends Draggable
    constructor()
    {
       const panel = document.createElement("div");
-      const toolbar = new Toolbar();
-      super(toolbar.getToolbar(),panel , Draggable.MouseButton.RIGHT);
+      const toolbar = new Toolbar(Draggable.MouseButton.RIGHT);
+      super(toolbar.getToolbar(),panel , Draggable.MouseButton.LEFT);
       
       this.panel = panel;
       this.toolbar = toolbar;
@@ -198,6 +206,7 @@ class FileExplorer extends Draggable
 {
     private file_list_provider: any;
     private browsing_panel: HTMLElement;
+    private items_container: HTMLElement;
     private file_select_mode: any;
     private selected_files: any;
 
@@ -288,14 +297,14 @@ class FileExplorer extends Draggable
         MainPanel.appendChild(ToolsSection);
         this.browsing_panel.appendChild(MainPanel);
 
-        /*this.#ItemsPanel = document.createElement("div");
-        this.#ItemsPanel.className = "ItemSection";*/
-        //MainPanel.appendChild(this.#ItemsPanel);
+        this.items_container = document.createElement("div");
+        this.items_container.className = "ItemSection";
+        MainPanel.appendChild(this.items_container);
 
         this.fetchItems();
 
     }
-    private makeFilePanel(name)
+    public addFilePanel(name: string)
     {
         let panel = document.createElement("div");
         panel.title = name;
@@ -311,9 +320,9 @@ class FileExplorer extends Draggable
                                     this.SelectedItems[this.#FileBrowser.CurrentDirPath + '/' + name] = name
                                  };*/
         }
-        return panel
+        this.items_container.appendChild(panel);
     }
-    private makeFolderPanel(name)
+    public addFolderPanel(name: string)
     {
         let panel = document.createElement("div");
         panel.title = name;
@@ -324,7 +333,7 @@ class FileExplorer extends Draggable
             //this.#FileBrowser.gotoSubDir(name);
             this.fetchItems();
         }
-        return panel;
+         this.items_container.appendChild(panel);
     }
     fetchItems()
     {
@@ -361,5 +370,9 @@ class Editor
  public addFileExplorer(file_explorer: FileExplorer): void
  {
    this.area.appendChild(file_explorer.getPanel());
+ }
+ public addToolbar(toolbar: Toolbar): void
+ {
+   this.area.appendChild(toolbar.getToolbar());
  }
 }
