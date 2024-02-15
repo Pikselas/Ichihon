@@ -45,6 +45,12 @@ class FileExplorer extends Draggable
         panel.className = "Item File";
         panel.appendChild(document.createElement("div"));
         panel.children[0].innerHTML = name;
+
+        let select_box = document.createElement("input");
+        select_box.type = "checkbox";
+
+        panel.appendChild(select_box);
+
         this.items_container.appendChild(panel);
     }
     public addFolderPanel(name: string)
