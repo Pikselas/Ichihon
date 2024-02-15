@@ -39,8 +39,8 @@ class Draggable
       document.body.addEventListener("mousemove", this.drag_handler);
 
       let parent = this.drag_element.parentNode;
-      parent.removeChild(this.drag_element);
-      parent.appendChild(this.drag_element);
+      // parent.removeChild(this.drag_element);
+      // parent.appendChild(this.drag_element);
 
    }
    private onDrag(offset_x:number , offset_y:number, event:MouseEvent): void

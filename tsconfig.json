@@ -4,6 +4,6 @@
         "target": "ESNext",
         "watch": true,
         "noEmitOnError": true,
-        "outDir": "js",
+        "outDir": "web/js",
     }
 }
