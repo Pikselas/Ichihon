@@ -25,7 +25,7 @@ class FileExplorer extends Draggable
         ToolsSection.className = "Tools";
         let UpDirButton = document.createElement("img");
         UpDirButton.src = "./media/up-arrow.png";
-        //UpDirButton.onclick = ()=>{ this.#FileBrowser.gotoParentDir(); this.fetchItems(); };
+        UpDirButton.onclick = ()=>{ this.file_list_provider.gotoParentDir(); this.fetchItems(); };
         ToolsSection.appendChild(UpDirButton);
         
         MainPanel.appendChild(ToolsSection);
@@ -55,7 +55,6 @@ class FileExplorer extends Draggable
         panel.appendChild(document.createElement("div"));
         panel.children[0].innerHTML = name;
         panel.onclick = ()=>{
-            console.log("Clicked on " + name);
             this.file_list_provider.gotoSubDir(name);
             this.fetchItems();
         }
@@ -65,7 +64,6 @@ class FileExplorer extends Draggable
     {
         let items = await this.file_list_provider.listItems();
         this.items_container.innerHTML = '';
-        let TimeInterVal = 20;
         items.forEach((item)=>
         {
             item.type == "file" ? this.addFilePanel(item.name) : this.addFolderPanel(item.name);
