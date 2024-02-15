@@ -3,7 +3,6 @@ class FileExplorer extends Draggable
     private file_list_provider: FileLister;
     private browsing_panel: HTMLElement;
     private items_container: HTMLElement;
-    private selected_files: any;
 
     constructor(file_lister: FileLister)
     {
@@ -21,12 +20,54 @@ class FileExplorer extends Draggable
 
         let MainPanel = document.createElement("div");
         MainPanel.className = "MainPanel";
+        
         let ToolsSection = document.createElement("div");
         ToolsSection.className = "Tools";
+        
         let UpDirButton = document.createElement("img");
         UpDirButton.src = "./media/up-arrow.png";
         UpDirButton.onclick = ()=>{ this.file_list_provider.gotoParentDir(); this.fetchItems(); };
+        UpDirButton.title = "Parent Directory";
+
+        let ConfirmButton = document.createElement("img");
+        ConfirmButton.src = "./media/confirm-mark.png";
+        ConfirmButton.title = "Confirm Selection";
+
+        let SelectionButton = document.createElement("img");
+        
+        SelectionButton.src = "./media/select-all.png";
+        SelectionButton.title = "Select All";
+        SelectionButton["is_selected"] = false;
+
+        SelectionButton.addEventListener("click", ()=>
+        {
+            let selections = document.querySelectorAll("input[name=file_explorer_select_box]");
+
+            if(SelectionButton["is_selected"])
+            {
+                selections.forEach((select_box: HTMLInputElement)=>
+                {
+                    select_box.checked = false;
+                });
+                SelectionButton["is_selected"] = false;
+                SelectionButton.title = "Select All";
+                SelectionButton.src = "./media/select-all.png";
+            }
+            else
+            {
+                selections.forEach((select_box: HTMLInputElement)=>
+                {
+                    select_box.checked = true;
+                });
+                SelectionButton["is_selected"] = true;
+                SelectionButton.title = "Select None";
+                SelectionButton.src = "./media/select-none.png";
+            }
+        });
+        
         ToolsSection.appendChild(UpDirButton);
+        ToolsSection.appendChild(ConfirmButton);
+        ToolsSection.appendChild(SelectionButton);
         
         MainPanel.appendChild(ToolsSection);
         this.browsing_panel.appendChild(MainPanel);
@@ -48,6 +89,7 @@ class FileExplorer extends Draggable
 
         let select_box = document.createElement("input");
         select_box.type = "checkbox";
+        select_box.name = "file_explorer_select_box";
 
         panel.appendChild(select_box);
 
