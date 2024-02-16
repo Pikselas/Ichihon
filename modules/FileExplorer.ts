@@ -3,6 +3,7 @@ class FileExplorer extends Draggable
     private file_list_provider: FileLister;
     private browsing_panel: HTMLElement;
     private items_container: HTMLElement;
+    private selection_button: HTMLImageElement;
 
     constructor(file_lister: FileLister)
     {
@@ -65,6 +66,8 @@ class FileExplorer extends Draggable
             }
         });
         
+        this.selection_button = SelectionButton;
+
         ToolsSection.appendChild(UpDirButton);
         ToolsSection.appendChild(ConfirmButton);
         ToolsSection.appendChild(SelectionButton);
@@ -116,6 +119,9 @@ class FileExplorer extends Draggable
         {
             item.type == "file" ? this.addFilePanel(item.name) : this.addFolderPanel(item.name);
         });
+        this.selection_button.src = "./media/select-all.png";
+        this.selection_button["is_selected"] = false;
+        this.selection_button.title = "Select All";
     }
     public getPanel(): HTMLElement
     {
