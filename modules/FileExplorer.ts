@@ -57,9 +57,21 @@ class FileExplorer extends Draggable implements PanelObservable
         
         this.selection_button = SelectionButton;
 
+        let link_button = document.createElement("img");
+        link_button.src = "./media/connect-medium.png";
+        link_button.title = "Connect to this panel";
+        link_button.onclick = ()=>
+        { 
+            if(ACTIVE_LINK_OBSERVER != null)
+            {
+                GLOBAL_LINK_MANAGER.Connect(ACTIVE_LINK_OBSERVER , this);
+            }
+        }
+
         ToolsSection.appendChild(UpDirButton);
         ToolsSection.appendChild(ConfirmButton);
         ToolsSection.appendChild(SelectionButton);
+        ToolsSection.appendChild(link_button);
         
         MainPanel.appendChild(ToolsSection);
         this.browsing_panel.appendChild(MainPanel);
@@ -74,7 +86,7 @@ class FileExplorer extends Draggable implements PanelObservable
 
     private toggleSelectionButton()
     {
-        let selections = document.querySelectorAll("input[name=file_explorer_select_box]");
+        let selections = this.browsing_panel.querySelectorAll("input[name=file_explorer_select_box]");
 
         if(this.selection_button["is_selected"])
         {

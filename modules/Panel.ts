@@ -31,7 +31,14 @@ class Panel extends Draggable implements PanelObserver
          this.drop_area.hidden ? this.drop_area.hidden = false : this.drop_area.hidden = true;
       };
 
+      let link_tool = new Tool("./media/connect-small.png","Connect with another panel");
+      link_tool.OnClick = () => 
+      {
+         ACTIVE_LINK_OBSERVER = this;
+      };
+
       this.toolbar.addTool(add_tool);
+      this.toolbar.addTool(link_tool);
       this.toolbar.addTool(new Tool("./media/color.png","Change Color"));
       this.toolbar.addTool(new Tool("./media/plus-small.png","Add Item"));
    }

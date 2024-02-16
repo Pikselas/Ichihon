@@ -19,12 +19,6 @@ class LinkLine
         
         this.link_line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 
-        this.link_line.setAttribute("x1" , this.linkable1.getBoundingClientRect().left.toString());
-        this.link_line.setAttribute("y1" , this.linkable1.getBoundingClientRect().top.toString());
-
-        this.link_line.setAttribute("x2" , this.linkable2.getBoundingClientRect().left.toString());
-        this.link_line.setAttribute("y2" , this.linkable2.getBoundingClientRect().top.toString());
-
         this.link_line.setAttribute("style" , "stroke:rgb(2, 250, 233);stroke-width:2");
 
         this.link_line_svg.appendChild(this.link_line);
@@ -42,6 +36,8 @@ class LinkLine
 
        this.observer.observe(linkable1 , { attributes: true });
        this.observer.observe(linkable2 , { attributes: true });
+
+       this.updateLinkLine();
     }
 
     private updateLinkLine()
