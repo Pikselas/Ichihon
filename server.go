@@ -58,6 +58,12 @@ func main() {
 		})
 
 	http.HandleFunc(
+		path(http.MethodGet, "/get_file/{path...}"),
+		func(w http.ResponseWriter, r *http.Request) {
+			http.ServeFile(w, r, r.PathValue("path"))
+		})
+
+	http.HandleFunc(
 		path(http.MethodGet, "/{path...}"),
 		func(w http.ResponseWriter, r *http.Request) {
 			http.ServeFile(w, r, "web/"+r.PathValue("path"))

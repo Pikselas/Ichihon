@@ -1,4 +1,4 @@
-class Panel extends Draggable
+class Panel extends Draggable implements PanelObserver
 {
    private toolbar: Toolbar;
    private panel: HTMLDivElement;
@@ -56,5 +56,17 @@ class Panel extends Draggable
 
       this.panel = null;
       this.toolbar = null;
+   }
+
+   public onChangeDetected(change: ChangeData): void
+   {
+      if(change.type == CHANGE_file_selected)
+      {
+         change.data.forEach((file: string)=>
+         {
+            let media = new ImageObject("/get_file/" + file);
+            this.addMediaObject(media);
+         });
+      }
    }
 }
