@@ -38,7 +38,7 @@ class Draggable
       this.drag_handler = this.onDrag.bind(this,event.pageX ,event.pageY );
       document.body.addEventListener("mousemove", this.drag_handler);
 
-      let parent = this.drag_element.parentNode;
+      //let parent = this.drag_element.parentNode;
       // parent.removeChild(this.drag_element);
       // parent.appendChild(this.drag_element);
 

@@ -1,9 +1,11 @@
-class FileExplorer extends Draggable
+class FileExplorer extends Draggable implements PanelObservable
 {
     private file_list_provider: FileLister;
     private browsing_panel: HTMLElement;
     private items_container: HTMLElement;
     private selection_button: HTMLImageElement;
+
+    private observers: PanelObserver[] = [];
 
     constructor(file_lister: FileLister)
     {
@@ -34,37 +36,24 @@ class FileExplorer extends Draggable
         ConfirmButton.src = "./media/confirm-mark.png";
         ConfirmButton.title = "Confirm Selection";
 
+        ConfirmButton.onclick = ()=>
+        {
+            let selections = document.querySelectorAll("input[name=file_explorer_select_box]:checked");
+            let selected_files: string[] = [];
+            selections.forEach((select_box: HTMLInputElement)=>
+            {
+                selected_files.push(this.file_list_provider.getCurrentDir() + '/' + select_box.parentElement.title);
+            });
+            this.notifyObservers({type: CHANGE_file_selected, data: selected_files});
+        }
+
         let SelectionButton = document.createElement("img");
         
         SelectionButton.src = "./media/select-all.png";
         SelectionButton.title = "Select All";
         SelectionButton["is_selected"] = false;
 
-        SelectionButton.addEventListener("click", ()=>
-        {
-            let selections = document.querySelectorAll("input[name=file_explorer_select_box]");
-
-            if(SelectionButton["is_selected"])
-            {
-                selections.forEach((select_box: HTMLInputElement)=>
-                {
-                    select_box.checked = false;
-                });
-                SelectionButton["is_selected"] = false;
-                SelectionButton.title = "Select All";
-                SelectionButton.src = "./media/select-all.png";
-            }
-            else
-            {
-                selections.forEach((select_box: HTMLInputElement)=>
-                {
-                    select_box.checked = true;
-                });
-                SelectionButton["is_selected"] = true;
-                SelectionButton.title = "Select None";
-                SelectionButton.src = "./media/select-none.png";
-            }
-        });
+        SelectionButton.addEventListener("click" , ()=>{ this.toggleSelectionButton() } );
         
         this.selection_button = SelectionButton;
 
@@ -82,6 +71,34 @@ class FileExplorer extends Draggable
         this.fetchItems();
 
     }
+
+    private toggleSelectionButton()
+    {
+        let selections = document.querySelectorAll("input[name=file_explorer_select_box]");
+
+        if(this.selection_button["is_selected"])
+        {
+            selections.forEach((select_box: HTMLInputElement)=>
+            {
+                select_box.checked = false;
+            });
+            this.selection_button["is_selected"] = false;
+            this.selection_button.title = "Select All";
+            this.selection_button.src = "./media/select-all.png";
+        }
+        else
+        {
+            selections.forEach((select_box: HTMLInputElement)=>
+            {
+                select_box.checked = true;
+            });
+            this.selection_button["is_selected"] = true;
+            this.selection_button.title = "Select None";
+            this.selection_button.src = "./media/select-none.png";
+        }
+
+    }
+
     public addFilePanel(name: string)
     {
         let panel = document.createElement("div");
@@ -119,12 +136,32 @@ class FileExplorer extends Draggable
         {
             item.type == "file" ? this.addFilePanel(item.name) : this.addFolderPanel(item.name);
         });
-        this.selection_button.src = "./media/select-all.png";
-        this.selection_button["is_selected"] = false;
-        this.selection_button.title = "Select All";
+        this.selection_button["is_selected"] ? this.toggleSelectionButton() : null;
     }
     public getPanel(): HTMLElement
     {
         return this.browsing_panel;
+    }
+
+    public addObserver(observer: PanelObserver)
+    {
+        this.observers.push(observer);
+    }
+
+    public removeObserver(observer: PanelObserver)
+    {
+        let index = this.observers.indexOf(observer);
+        if(index != -1)
+        {
+            this.observers.splice(index,1);
+        }
+    }
+
+    private notifyObservers(data: ChangeData)
+    {
+        this.observers.forEach((observer)=>
+        {
+            observer.onChangeDetected(data);
+        });
     }
 }
