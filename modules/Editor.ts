@@ -41,12 +41,4 @@ class Editor
  {
    this.area.appendChild(panel.getPanel());
  } 
- public addFileExplorer(file_explorer: FileExplorer): void
- {
-   this.area.appendChild(file_explorer.getPanel());
- }
- public addToolbar(toolbar: Toolbar): void
- {
-   this.area.appendChild(toolbar.getToolbar());
- }
 }

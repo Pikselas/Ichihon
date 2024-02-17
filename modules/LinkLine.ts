@@ -6,12 +6,16 @@ class LinkLine
     private linkable1: HTMLElement;
     private linkable2: HTMLElement;
 
+    private parent_element: HTMLElement;
+
     private observer: MutationObserver;
-    constructor(linkable1: HTMLElement, linkable2: HTMLElement)
+    constructor(linkable1: HTMLElement, linkable2: HTMLElement , parent_element: HTMLElement)
     {
 
         this.linkable1 = linkable1;
         this.linkable2 = linkable2;
+
+        this.parent_element = parent_element;
 
         this.link_line_svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
@@ -42,18 +46,18 @@ class LinkLine
 
     private updateLinkLine()
     {
-        this.link_line_svg.setAttribute("width" , document.documentElement.scrollWidth.toString());
-        this.link_line_svg.setAttribute("height" , document.documentElement.scrollHeight.toString());
+        this.link_line_svg.setAttribute("width" , this.parent_element.scrollWidth.toString());
+        this.link_line_svg.setAttribute("height" , this.parent_element.scrollHeight.toString());
 
        // console.log(document.documentElement.scrollLeft ,  this.linkable1.getBoundingClientRect().left , document.documentElement.scrollTop + this.linkable1.getBoundingClientRect().top);
 
         console.log(this.linkable1.clientHeight);
 
-        this.link_line.setAttribute("x1" , (document.documentElement.scrollLeft +  this.linkable1.getBoundingClientRect().left + this.linkable1.clientWidth / 2).toString());
-        this.link_line.setAttribute("y1" , (document.documentElement.scrollTop + this.linkable1.getBoundingClientRect().top + this.linkable1.clientHeight / 2).toString());
+        this.link_line.setAttribute("x1" , (this.parent_element.scrollLeft +  this.linkable1.getBoundingClientRect().left + this.linkable1.clientWidth / 2).toString());
+        this.link_line.setAttribute("y1" , (this.parent_element.scrollTop + this.linkable1.getBoundingClientRect().top + this.linkable1.clientHeight / 2).toString());
 
-        this.link_line.setAttribute("x2" , (document.documentElement.scrollLeft + this.linkable2.getBoundingClientRect().left + this.linkable2.clientWidth / 2).toString());
-        this.link_line.setAttribute("y2" , (document.documentElement.scrollTop + this.linkable2.getBoundingClientRect().top + this.linkable2.clientHeight / 2).toString());
+        this.link_line.setAttribute("x2" , (this.parent_element.scrollLeft + this.linkable2.getBoundingClientRect().left + this.linkable2.clientWidth / 2).toString());
+        this.link_line.setAttribute("y2" , (this.parent_element.scrollTop + this.linkable2.getBoundingClientRect().top + this.linkable2.clientHeight / 2).toString());
     }
 
     public getLinkLine()

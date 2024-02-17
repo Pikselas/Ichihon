@@ -1,7 +1,6 @@
-class FileExplorer extends Draggable implements PanelObservable
+class FileExplorer extends Panel implements PanelObservable
 {
     private file_list_provider: FileLister;
-    private browsing_panel: HTMLElement;
     private items_container: HTMLElement;
     private selection_button: HTMLImageElement;
 
@@ -9,17 +8,15 @@ class FileExplorer extends Draggable implements PanelObservable
 
     constructor(file_lister: FileLister)
     {
-        let panel = document.createElement("div");
-        super(panel,panel);
+        super();
         this.file_list_provider = file_lister
-        this.browsing_panel = panel;
-        this.browsing_panel.className = "FileBrowserWindow";
+        this.panel.className = "FileBrowserWindow";
 
         let RotatingSection = document.createElement("div");
         RotatingSection.className = "Rotor";
         RotatingSection.appendChild(document.createElement("div"));
         RotatingSection.appendChild(document.createElement("div"));
-        this.browsing_panel.appendChild(RotatingSection);
+        this.panel.appendChild(RotatingSection);
 
         let MainPanel = document.createElement("div");
         MainPanel.className = "MainPanel";
@@ -74,7 +71,7 @@ class FileExplorer extends Draggable implements PanelObservable
         ToolsSection.appendChild(link_button);
         
         MainPanel.appendChild(ToolsSection);
-        this.browsing_panel.appendChild(MainPanel);
+        this.panel.appendChild(MainPanel);
 
         this.items_container = document.createElement("div");
         this.items_container.className = "ItemSection";
@@ -86,7 +83,7 @@ class FileExplorer extends Draggable implements PanelObservable
 
     private toggleSelectionButton()
     {
-        let selections = this.browsing_panel.querySelectorAll("input[name=file_explorer_select_box]");
+        let selections = this.panel.querySelectorAll("input[name=file_explorer_select_box]");
 
         if(this.selection_button["is_selected"])
         {
@@ -149,10 +146,6 @@ class FileExplorer extends Draggable implements PanelObservable
             item.type == "file" ? this.addFilePanel(item.name) : this.addFolderPanel(item.name);
         });
         this.selection_button["is_selected"] ? this.toggleSelectionButton() : null;
-    }
-    public getPanel(): HTMLElement
-    {
-        return this.browsing_panel;
     }
 
     public addObserver(observer: PanelObserver)

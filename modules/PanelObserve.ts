@@ -29,8 +29,8 @@ class ObservableLinksManager
   public Connect(observer: PanelObserver, observable: PanelObservable)
   {
     observable.addObserver(observer);
-    let link_line = new LinkLine(observer.getPanel(), observable.getPanel());
-    this.link_lines.push(link_line);
-    this.display_area.appendChild(link_line.getLinkLine());
+    // let link_line = new LinkLine(observer.getPanel(), observable.getPanel());
+    // this.link_lines.push(link_line);
+    // this.display_area.appendChild(link_line.getLinkLine());
   }
 }

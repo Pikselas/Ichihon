@@ -1,28 +1,12 @@
-class Toolbar extends Draggable
+class Toolbar extends Panel
 {
-   private toolbar: HTMLDivElement;
-   constructor(drag_key: number = Draggable.MouseButton.LEFT)
+   constructor()
    {
-      const toolbar = document.createElement("div");
-      super(toolbar,toolbar , drag_key);
-      toolbar.className = "toolbar";
-      this.toolbar = toolbar;
+      super();
+      this.panel.className = "toolbar";
    }
    public addTool(tool: Tool): void
    {
-      this.toolbar.appendChild(tool.getTool());
+      this.panel.appendChild(tool.getTool());
    }
-   public getToolbar(): HTMLDivElement
-   {
-      return this.toolbar;
-   }
-   public setWidth(width: number): void
-   {
-      this.toolbar.style.width = width + "px";
-   }
-   public setHeight(height: number): void
-   {
-      this.toolbar.style.height = height + "px";
-   }
-
 }
