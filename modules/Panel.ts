@@ -29,7 +29,9 @@ class Panel
    }
 }
 
-class ImageCollectionPanel extends Panel
+class EditorViewPanel extends Panel {}
+
+class ImageCollectionPanel extends EditorViewPanel
 {
    private toolbar: Toolbar;
    private media_container: HTMLDivElement;

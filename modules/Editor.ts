@@ -40,5 +40,24 @@ class Editor
  public addPanel(panel: Panel): void
  {
    this.area.appendChild(panel.getPanel());
- } 
+ }
+ public bindNodeConnector(panel: Panel , node_connector: NodeConnector): void
+ {
+   node_connector.getNode().setPosition(panel.getPanel().offsetLeft, panel.getPanel().offsetTop);
+
+   let observer = new MutationObserver((mutations)=>
+   {
+      for (let mutation of mutations)
+      {
+         if (mutation.type == 'attributes')
+         {
+            node_connector.getNode().setPosition(panel.getPanel().offsetLeft - 15, panel.getPanel().offsetTop - 15);
+         }
+      }
+   });
+
+   observer.observe(panel.getPanel(), { attributes: true });
+
+   this.area.appendChild(node_connector.getNode().getPanel());
+ }
 }

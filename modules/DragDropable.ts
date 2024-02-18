@@ -89,6 +89,9 @@ class DraggAble
    private capture_pos_x: number;
    private capture_pos_y: number;
 
+   private drag_star_x: number;
+   private drag_start_y: number;
+
    constructor (target: Panel)
    {
       this.target = target;
@@ -96,13 +99,13 @@ class DraggAble
 
       target.getPanel().addEventListener("dragstart", (event: DragEvent)=>
       {  
-         this.capture_pos_x = event.clientX;
-         this.capture_pos_y = event.clientY;
-         
          DraggAble.current_draggable = this;
 
          this.capture_pos_x = event.offsetX;
          this.capture_pos_y = event.offsetY;
+
+         this.drag_star_x = event.clientX;
+         this.drag_start_y = event.clientY;
 
          event.dataTransfer.setDragImage(new Image(), 0, 0);
       });
@@ -118,27 +121,59 @@ class DraggAble
       this.target.setPosition(x - this.capture_pos_x, y - this.capture_pos_y);
    }
 
+   public resetPosition(): void
+   {
+      this.target.setPosition(this.drag_star_x - this.capture_pos_x, this.drag_start_y - this.capture_pos_y);
+   }
+
+   public getTarget(): Panel
+   {
+      return this.target;
+   }
+
    public static GetCurrentDraggable(): DraggAble
    {
       return DraggAble.current_draggable;
    }
-
 }
 
 class DropArea
 {
    public DropHandler: (event: DragEvent) => void = (event: DragEvent) => {}; 
    public DragOverHandler: (event: DragEvent) => void = (event: DragEvent) => {};
+
+   private target_element: HTMLElement;
    
+   private drag_handler: any;
+   private drop_handler: any;
+
    constructor (target_element: HTMLElement)
    {
-      target_element.addEventListener("dragover", (event: DragEvent)=>
+      this.target_element = target_element;
+      
+      this.drag_handler = (ev: DragEvent )=>
       {
-         this.DragOverHandler(event);
-      });
-      target_element.addEventListener("drop", (event: DragEvent)=>
+         this.DragOverHandler(ev);
+      }
+
+      this.drop_handler = (ev: DragEvent )=>
       {
-         this.DropHandler(event);
-      });
+         this.DropHandler(ev);
+      }
+
+      target_element.addEventListener("dragover", this.drag_handler);
+      target_element.addEventListener("drop", this.drop_handler);
+   }
+
+   public clear(): void
+   {
+      this.target_element.removeEventListener("dragover", this.drag_handler);
+      this.target_element.removeEventListener("drop", this.drop_handler);
+
+      this.drag_handler = null;
+      this.drop_handler = null;
+
+      this.DropHandler = null;
+      this.DragOverHandler = null;
    }
 }

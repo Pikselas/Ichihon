@@ -1,4 +1,4 @@
-class FileExplorer extends Panel implements PanelObservable
+class FileExplorer extends EditorViewPanel implements PanelObservable
 {
     private file_list_provider: FileLister;
     private items_container: HTMLElement;
