@@ -14,15 +14,13 @@ class NodeConnector
 {
     private drop_area: DropArea = null;
 
-    private link_lines: Array<LinkLine> = new Array<LinkLine>();
-
     private temp_link_line: LinkLine = null;
     private temp_node: NodeObject = null;
 
-
     private draggable: DraggAble = null;
-
     private node: NodeObject = null;
+
+    private link_lines: Array<LinkLine> = new Array<LinkLine>();
 
     constructor()
     {
@@ -100,9 +98,9 @@ class NodeConnector
 
     private drag_end_handler(ev: DragEvent)
     {
+        this.node.getPanel().style.zIndex = "0";
         if(this.temp_node != null)
         {
-            this.node.getPanel().style.zIndex = "0";
             this.draggable.resetPosition();
             this.drop_area = new DropArea(this.node.getPanel());
 

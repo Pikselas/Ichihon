@@ -60,15 +60,4 @@ class ImageCollectionPanel extends EditorViewPanel
    {
       this.media_container.appendChild(media.getMediaObject());
    }
-   public onChangeDetected(change: ChangeData): void
-   {
-      if(change.type == CHANGE_file_selected)
-      {
-         change.data.forEach((file: string)=>
-         {
-            let media = new ImageObject("/get_file/" + file);
-            this.addMediaObject(media);
-         });
-      }
-   }
 }

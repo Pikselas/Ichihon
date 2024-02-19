@@ -1,10 +1,8 @@
-class FileExplorer extends EditorViewPanel implements PanelObservable
+class FileExplorer extends EditorViewPanel
 {
     private file_list_provider: FileLister;
     private items_container: HTMLElement;
     private selection_button: HTMLImageElement;
-
-    private observers: PanelObserver[] = [];
 
     constructor(file_lister: FileLister)
     {
@@ -41,7 +39,6 @@ class FileExplorer extends EditorViewPanel implements PanelObservable
             {
                 selected_files.push(this.file_list_provider.getCurrentDir() + '/' + select_box.parentElement.title);
             });
-            this.notifyObservers({type: CHANGE_file_selected, data: selected_files});
         }
 
         let SelectionButton = document.createElement("img");
@@ -54,21 +51,9 @@ class FileExplorer extends EditorViewPanel implements PanelObservable
         
         this.selection_button = SelectionButton;
 
-        let link_button = document.createElement("img");
-        link_button.src = "./media/connect-medium.png";
-        link_button.title = "Connect to this panel";
-        link_button.onclick = ()=>
-        { 
-            if(ACTIVE_LINK_OBSERVER != null)
-            {
-                GLOBAL_LINK_MANAGER.Connect(ACTIVE_LINK_OBSERVER , this);
-            }
-        }
-
         ToolsSection.appendChild(UpDirButton);
         ToolsSection.appendChild(ConfirmButton);
         ToolsSection.appendChild(SelectionButton);
-        ToolsSection.appendChild(link_button);
         
         MainPanel.appendChild(ToolsSection);
         this.panel.appendChild(MainPanel);
@@ -146,27 +131,5 @@ class FileExplorer extends EditorViewPanel implements PanelObservable
             item.type == "file" ? this.addFilePanel(item.name) : this.addFolderPanel(item.name);
         });
         this.selection_button["is_selected"] ? this.toggleSelectionButton() : null;
-    }
-
-    public addObserver(observer: PanelObserver)
-    {
-        this.observers.push(observer);
-    }
-
-    public removeObserver(observer: PanelObserver)
-    {
-        let index = this.observers.indexOf(observer);
-        if(index != -1)
-        {
-            this.observers.splice(index,1);
-        }
-    }
-
-    private notifyObservers(data: ChangeData)
-    {
-        this.observers.forEach((observer)=>
-        {
-            observer.onChangeDetected(data);
-        });
     }
 }
