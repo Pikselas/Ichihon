@@ -123,3 +123,15 @@ body
         left: -70px;
     }
 }
+
+.connector_node
+{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background:linear-gradient(45deg, #000dff, #24ffed);
+    position: absolute;
+    cursor: pointer;
+    z-index: 1;
+    box-shadow: 0px 0px 10px 0px #000000;
+}

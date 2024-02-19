@@ -6,16 +6,7 @@ class NodeObject extends Panel
     {
         super();
 
-        this.panel.style.width = "10px";
-        this.panel.style.height = "10px";
-        this.panel.style.backgroundColor = "blue";
-        this.panel.style.position = "absolute";
-        this.panel.style.left = "100px";
-        this.panel.style.top = "100px";
-        this.panel.style.borderTopLeftRadius = "50%";
-        this.panel.style.borderBottomLeftRadius = "50%";
-        this.panel.style.borderTopRightRadius = "45%";
-        this.panel.style.borderBottomRightRadius = "45%";
+        this.panel.className = "connector_node";
     }
 }
 

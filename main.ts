@@ -32,19 +32,18 @@ function SetUpEditor(html_area : HTMLElement)
     let node_3 = new NodeConnector();
 
     let ex =  new FileExplorer(new FileLister("/get_file_list","D:"));
-    let ex2 =  new FileExplorer(new FileLister("/get_file_list","D:"));
-    let ex3 =  new FileExplorer(new FileLister("/get_file_list","D:"));
-
+    let pan_1 = new ImageCollectionPanel();
+    let pan_2 = new ImageCollectionPanel();
     
     new DraggAble(ex);
-    new DraggAble(ex2);
-    new DraggAble(ex3);
+    new DraggAble(pan_1);
+    new DraggAble(pan_2);
 
     editor.addPanel(ex);
-    editor.addPanel(ex2);
-    editor.addPanel(ex3);
+    editor.addPanel(pan_1);
+    editor.addPanel(pan_2);
 
     editor.bindNodeConnector(ex, node_1);
-    editor.bindNodeConnector(ex2, node_2);
-    editor.bindNodeConnector(ex3, node_3);
+    editor.bindNodeConnector(pan_1, node_2);
+    editor.bindNodeConnector(pan_2, node_3);
 }
