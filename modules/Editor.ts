@@ -43,7 +43,7 @@ class Editor
  }
  public bindNodeConnector(panel: Panel , node_connector: NodeConnector): void
  {
-   node_connector.getNode().setPosition(panel.getPanel().offsetLeft, panel.getPanel().offsetTop);
+   node_connector.getNode().setPosition(panel.getPanel().offsetLeft - 15, panel.getPanel().offsetTop - 15);
 
    let observer = new MutationObserver((mutations)=>
    {

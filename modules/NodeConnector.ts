@@ -95,7 +95,6 @@ class NodeConnector
             {
                 link_line.setLinkable2(this.temp_node.getPanel());
             }
-
         });
     }
 
@@ -103,27 +102,33 @@ class NodeConnector
     {
         if(this.temp_node != null)
         {
+            this.node.getPanel().style.zIndex = "0";
+            this.draggable.resetPosition();
+            this.drop_area = new DropArea(this.node.getPanel());
+
+            this.link_lines.forEach((link_line)=>
+            {
+                let l1 = link_line.getLinkable1();
+                let l2 = link_line.getLinkable2();
+
+                if(l1 == this.temp_node.getPanel())
+                {
+                    link_line.setLinkable1(this.node.getPanel());
+                }
+                else if(l2 == this.temp_node.getPanel())
+                {
+                    link_line.setLinkable2(this.node.getPanel());
+                }
+            });
+
             this.temp_link_line.remove();
             this.temp_node.getPanel().remove();
 
             this.temp_node = null;
             this.temp_link_line = null;
-
-            this.node.getPanel().style.zIndex = "0";
-
-            this.draggable.resetPosition();
-
-            //this.draggable
-
-            this.drop_area = new DropArea(this.node.getPanel());
-
-            console.log("Hello");
         }
         else
         {
-            console.log(this.link_lines.length);
-            console.log("Goodbye");
-            console.log(this.node);
             this.setup_node();
         }
     }
