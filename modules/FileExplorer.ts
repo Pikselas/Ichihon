@@ -1,4 +1,4 @@
-class FileExplorer extends EditorViewPanel
+class FileExplorer extends EditorViewPanel implements NodeIConnectable
 {
     private file_list_provider: FileLister;
     private items_container: HTMLElement;
@@ -131,5 +131,10 @@ class FileExplorer extends EditorViewPanel
             item.type == "file" ? this.addFilePanel(item.name) : this.addFolderPanel(item.name);
         });
         this.selection_button["is_selected"] ? this.toggleSelectionButton() : null;
+    }
+
+    public OnConnect(connector: NodeIConnectable): void 
+    {
+        console.log(connector);    
     }
 }

@@ -97,4 +97,9 @@ class LinkLine
         this.observer.disconnect();
         this.link_line_svg.remove();
     }
+
+    public setColor(color: string)
+    {
+        this.link_line.setAttribute("style" , "stroke:" + color + ";stroke-width:2");
+    }
 }

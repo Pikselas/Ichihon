@@ -31,7 +31,7 @@ class Panel
 
 class EditorViewPanel extends Panel {}
 
-class ImageCollectionPanel extends EditorViewPanel
+class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
 {
    private toolbar: Toolbar;
    private media_container: HTMLDivElement;
@@ -59,5 +59,9 @@ class ImageCollectionPanel extends EditorViewPanel
    public addMediaObject(media: MediaObject): void
    {
       this.media_container.appendChild(media.getMediaObject());
+   }
+   public OnConnect(connector: NodeIConnectable): void 
+   {
+      console.log(connector);
    }
 }

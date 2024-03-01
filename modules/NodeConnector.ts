@@ -1,4 +1,10 @@
 
+interface NodeIConnectable
+{
+    OnConnect(connector:NodeIConnectable): void
+    //On(change: any): void
+}
+
 class NodeObject extends Panel
 {
     public node_connector: NodeConnector = null;
@@ -10,6 +16,8 @@ class NodeObject extends Panel
     }
 }
 
+type NodeConnectionObject = { observer: NodeConnector , link_line: LinkLine };
+
 class NodeConnector
 {
     private drop_area: DropArea = null;
@@ -20,10 +28,13 @@ class NodeConnector
     private draggable: DraggAble = null;
     private node: NodeObject = null;
 
-    private link_lines: Array<LinkLine> = new Array<LinkLine>();
+    private connections: Array<NodeConnectionObject> = new Array<NodeConnectionObject>();
 
-    constructor()
+    private connector_object: NodeIConnectable;
+
+    constructor(connector: NodeIConnectable)
     {
+        this.connector_object = connector;
         this.node = new NodeObject();
         this.setup_node();
     }
@@ -47,14 +58,15 @@ class NodeConnector
             node.node_connector.temp_node = null;
             node.node_connector.temp_link_line = null;
 
-            console.log(this.node.getPanel());
-
             let link_line = new LinkLine(this.node.getPanel(), node.node_connector.node.getPanel(), this.node.getPanel().parentElement);
 
-            this.link_lines.push(link_line);
-            node.node_connector.link_lines.push(link_line);
+            this.connections.push({ observer:node.node_connector, link_line: link_line });
+            node.node_connector.connections.push({ observer:this , link_line:link_line });
 
             this.node.getPanel().parentElement.appendChild(link_line.getLinkLine());
+
+            this.connector_object.OnConnect(node.node_connector.connector_object);
+            node.node_connector.connector_object.OnConnect(this.connector_object);
             
         }
     }
@@ -78,20 +90,18 @@ class NodeConnector
 
         this.node.getPanel().parentElement.appendChild(this.temp_link_line.getLinkLine());
 
-        console.log(this.link_lines.length);
-
-        this.link_lines.forEach((link_line)=>
+        this.connections.forEach((connection)=>
         {
-            let l1 = link_line.getLinkable1();
-            let l2 = link_line.getLinkable2();
+            let l1 = connection.link_line.getLinkable1();
+            let l2 = connection.link_line.getLinkable2();
 
             if(l1 == this.node.getPanel())
             {
-                link_line.setLinkable1(this.temp_node.getPanel());
+                connection.link_line.setLinkable1(this.temp_node.getPanel());
             }
             else if(l2 == this.node.getPanel())
             {
-                link_line.setLinkable2(this.temp_node.getPanel());
+                connection.link_line.setLinkable2(this.temp_node.getPanel());
             }
         });
     }
@@ -104,18 +114,18 @@ class NodeConnector
             this.draggable.resetPosition();
             this.drop_area = new DropArea(this.node.getPanel());
 
-            this.link_lines.forEach((link_line)=>
+            this.connections.forEach((connection)=>
             {
-                let l1 = link_line.getLinkable1();
-                let l2 = link_line.getLinkable2();
+                let l1 = connection.link_line.getLinkable1();
+                let l2 = connection.link_line.getLinkable2();
 
                 if(l1 == this.temp_node.getPanel())
                 {
-                    link_line.setLinkable1(this.node.getPanel());
+                    connection.link_line.setLinkable1(this.node.getPanel());
                 }
                 else if(l2 == this.temp_node.getPanel())
                 {
-                    link_line.setLinkable2(this.node.getPanel());
+                    connection.link_line.setLinkable2(this.node.getPanel());
                 }
             });
 
@@ -146,4 +156,79 @@ class NodeConnector
     {
         return this.node;
     }
+
+    public getConnections(): Array<NodeConnectionObject>
+    {
+        return this.connections;
+    }
+
+    public closeConnection(connection: NodeConnectionObject)
+    {
+        let indx = this.connections.indexOf(connection);
+        
+        this.connections.splice(indx , 1);
+
+        indx = connection.observer.connections.findIndex((con)=>
+        {
+            return con.observer == this;
+        });
+        connection.observer.connections.splice(indx,1);
+
+        connection.link_line.remove();
+    }
+}
+
+function CreateConnectionStatusPanel(connection_object: NodeConnector)
+{
+    let panel = document.createElement("div");
+    panel.className = "connection_status_panel";
+    let tool_bar = document.createElement("div");
+    tool_bar.className = "tool_bar";
+    let close_img = document.createElement("img");
+
+    close_img.src = "media/multiply.png";
+    tool_bar.appendChild(close_img);
+
+    let connection_panel = document.createElement("div");
+    connection_panel.className = "connection_panel";
+
+    close_img.onclick = ()=>
+    {
+        panel.remove();
+    }
+
+    connection_object.getConnections().forEach((connection,indx)=>
+    {
+        let link_panel = document.createElement("div");
+        link_panel.className = "connection";
+        let link_name = document.createElement("i");
+        link_name.innerHTML = "Link:" + indx;
+
+        let close_link = document.createElement("img");
+        close_link.src = "media/remove.png";
+
+        close_link.onclick = ()=>
+        {
+            connection_object.closeConnection(connection);
+        }
+
+        link_panel.onmouseenter = ()=>
+        {
+            connection.link_line.setColor("red");
+        };
+
+        link_panel.onmouseleave = ()=>
+        {
+            connection.link_line.setColor("rgb(2, 250, 233)");
+        };
+
+        link_panel.appendChild(link_name);
+        link_panel.appendChild(close_link);
+        connection_panel.appendChild(link_panel);
+    });
+
+    panel.appendChild(tool_bar);
+    panel.appendChild(connection_panel);
+    return panel;
+
 }

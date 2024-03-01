@@ -1,12 +1,11 @@
 
-let ACTIVE_LINK_OBSERVER: PanelObserver = null;
-let GLOBAL_LINK_MANAGER: ObservableLinksManager = null;
-
+let node_1 = null;
+let node_2 = null;
+let node_3 = null;
 
 function SetUpEditor(html_area : HTMLElement)
 {
     const editor = new Editor(html_area);
-    GLOBAL_LINK_MANAGER = new ObservableLinksManager(html_area);
     let drop_area = new DropArea(html_area);
     drop_area.DragOverHandler = (ev: DragEvent)=>
     {
@@ -27,14 +26,14 @@ function SetUpEditor(html_area : HTMLElement)
         }
     }
 
-    let node_1 = new NodeConnector();
-    let node_2 = new NodeConnector();
-    let node_3 = new NodeConnector();
-
     let ex =  new FileExplorer(new FileLister("/get_file_list","D:"));
     let pan_1 = new ImageCollectionPanel();
     let pan_2 = new ImageCollectionPanel();
     
+    node_1 = new NodeConnector(ex);
+    node_2 = new NodeConnector(pan_1);
+    node_3 = new NodeConnector(pan_2);
+
     new DraggAble(ex);
     new DraggAble(pan_1);
     new DraggAble(pan_2);
@@ -46,4 +45,5 @@ function SetUpEditor(html_area : HTMLElement)
     editor.bindNodeConnector(ex, node_1);
     editor.bindNodeConnector(pan_1, node_2);
     editor.bindNodeConnector(pan_2, node_3);
+
 }
