@@ -4,6 +4,8 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
     private items_container: HTMLElement;
     private selection_button: HTMLImageElement;
 
+    node_connector: NodeConnector; 
+
     constructor(file_lister: FileLister)
     {
         super();
@@ -18,6 +20,8 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
 
         let MainPanel = document.createElement("div");
         MainPanel.className = "MainPanel";
+
+        
         
         let ToolsSection = document.createElement("div");
         ToolsSection.className = "Tools";
@@ -136,5 +140,10 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
     public OnConnect(connector: NodeIConnectable): void 
     {
         console.log(connector);    
+    }
+
+    public OnChangeDetected(change: any): void 
+    {
+        console.log(change);
     }
 }

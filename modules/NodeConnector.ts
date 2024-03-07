@@ -1,8 +1,9 @@
 
 interface NodeIConnectable
 {
+    node_connector: NodeConnector;
     OnConnect(connector:NodeIConnectable): void
-    //On(change: any): void
+    OnChangeDetected(change: any): void
 }
 
 class NodeObject extends Panel
@@ -37,6 +38,8 @@ class NodeConnector
         this.connector_object = connector;
         this.node = new NodeObject();
         this.setup_node();
+
+        this.connector_object.node_connector = this;
     }
 
     private drop_handler(ev: DragEvent)
@@ -175,6 +178,14 @@ class NodeConnector
         connection.observer.connections.splice(indx,1);
 
         connection.link_line.remove();
+    }
+
+    public reflectChange(change: any)
+    {
+        this.connections.forEach((connection)=>
+        {
+            connection.observer.connector_object.OnChangeDetected(change);
+        });
     }
 }
 
