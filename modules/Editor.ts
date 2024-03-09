@@ -41,7 +41,7 @@ class Editor
  {
    this.area.appendChild(panel.getPanel());
  }
- public bindNodeConnector(panel: Panel , node_connector: NodeConnector): void
+ public bindNodeConnector(panel: EditorViewPanel , node_connector: NodeConnector): void
  {
    node_connector.getNode().setPosition(panel.getPanel().offsetLeft - 15, panel.getPanel().offsetTop - 15);
 
@@ -57,6 +57,8 @@ class Editor
    });
 
    observer.observe(panel.getPanel(), { attributes: true });
+
+   panel.mutation_observer = observer;
 
    this.area.appendChild(node_connector.getNode().getPanel());
  }

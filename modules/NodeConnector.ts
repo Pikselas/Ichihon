@@ -32,6 +32,7 @@ class NodeConnector
     private connections: Array<NodeConnectionObject> = new Array<NodeConnectionObject>();
 
     private connector_object: NodeIConnectable;
+    private change_observer: MutationObserver = null;
 
     constructor(connector: NodeIConnectable)
     {
@@ -66,8 +67,6 @@ class NodeConnector
             this.connections.push({ observer:node.node_connector, link_line: link_line });
             node.node_connector.connections.push({ observer:this , link_line:link_line });
 
-            this.node.getPanel().parentElement.appendChild(link_line.getLinkLine());
-
             this.connector_object.OnConnect(node.node_connector.connector_object);
             node.node_connector.connector_object.OnConnect(this.connector_object);
             
@@ -90,8 +89,6 @@ class NodeConnector
         this.node.getPanel().parentElement.appendChild(this.temp_node.getPanel());
 
         this.temp_link_line = new LinkLine(this.node.getPanel(), this.temp_node.getPanel(), this.node.getPanel().parentElement);
-
-        this.node.getPanel().parentElement.appendChild(this.temp_link_line.getLinkLine());
 
         this.connections.forEach((connection)=>
         {
@@ -178,6 +175,15 @@ class NodeConnector
         connection.observer.connections.splice(indx,1);
 
         connection.link_line.remove();
+    }
+
+    public remove()
+    {
+        while(this.connections.length > 0)
+        {
+            this.closeConnection(this.connections[0]);
+        }
+        this.node.getPanel().remove();
     }
 
     public reflectChange(change: any)

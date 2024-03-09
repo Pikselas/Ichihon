@@ -29,7 +29,10 @@ class Panel
    }
 }
 
-class EditorViewPanel extends Panel {}
+class EditorViewPanel extends Panel 
+{
+   public mutation_observer: MutationObserver;
+}
 
 class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
 {
