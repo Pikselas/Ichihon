@@ -53,11 +53,21 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
         
         this.selection_button = SelectionButton;
 
-        let close_button = document.createElement("img");
-        close_button.src = "./media/close-medium.png";
-        close_button.title = "Close";
+        let ShowConnectionsButton = document.createElement("img");
+        ShowConnectionsButton.src = "./media/connections-medium.png";
+        ShowConnectionsButton.title = "Show Connections";
 
-        close_button.onclick = ()=>
+        ShowConnectionsButton.onclick = ()=>
+        {
+            let panel = CreateConnectionStatusPanel(this.node_connector);
+            this.panel.appendChild(panel);
+        };
+
+        let CloseButton = document.createElement("img");
+        CloseButton.src = "./media/close-medium.png";
+        CloseButton.title = "Close";
+
+        CloseButton.onclick = ()=>
         {
             this.mutation_observer.disconnect();
             this.node_connector.remove();
@@ -67,7 +77,8 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
         ToolsSection.appendChild(UpDirButton);
         ToolsSection.appendChild(ConfirmButton);
         ToolsSection.appendChild(SelectionButton);
-        ToolsSection.appendChild(close_button);
+        ToolsSection.appendChild(ShowConnectionsButton);
+        ToolsSection.appendChild(CloseButton);
         
         MainPanel.appendChild(ToolsSection);
         this.panel.appendChild(MainPanel);

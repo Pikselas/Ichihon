@@ -5,6 +5,8 @@ let node_3 = null;
 
 function SetUpEditor(html_area : HTMLElement)
 {
+    html_area.appendChild(LinkLine.link_line_svg);
+
     const editor = new Editor(html_area);
     let drop_area = new DropArea(html_area);
     drop_area.DragOverHandler = (ev: DragEvent)=>
@@ -29,6 +31,9 @@ function SetUpEditor(html_area : HTMLElement)
     let ex =  new FileExplorer(new FileLister("/get_file_list","D:"));
     let pan_1 = new ImageCollectionPanel();
     let pan_2 = new ImageCollectionPanel();
+
+    pan_1.addMediaObject(new ImageObject("///D:/CoderWallp/pKZ96nf.jpg"));
+    pan_1.addMediaObject(new ImageObject("///D:/CoderWallp/prI6x2c.jpg"));
     
     node_1 = new NodeConnector(ex);
     node_2 = new NodeConnector(pan_1);

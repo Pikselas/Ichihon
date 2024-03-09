@@ -227,6 +227,7 @@ function CreateConnectionStatusPanel(connection_object: NodeConnector)
         close_link.onclick = ()=>
         {
             connection_object.closeConnection(connection);
+            link_panel.remove();
         }
 
         link_panel.onmouseenter = ()=>

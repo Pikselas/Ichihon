@@ -69,10 +69,16 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
       }
 
       let add_tool = new Tool("./media/plus-small.png","Add Item");
-      let link_tool = new Tool("./media/connect-small.png","Connect with another panel");
+      let connection_status_tool = new Tool("./media/connect-small.png","Connection Status");
+
+      connection_status_tool.OnClick = ()=>
+      {
+         let connection_status_panel = CreateConnectionStatusPanel(this.node_connector);
+         this.panel.appendChild(connection_status_panel);
+      }
 
       this.toolbar.addTool(add_tool);
-      this.toolbar.addTool(link_tool);
+      this.toolbar.addTool(connection_status_tool);
       this.toolbar.addTool(new Tool("./media/color.png","Change Color"));
       this.toolbar.addTool(new Tool("./media/plus-small.png","Add Item"));
    }

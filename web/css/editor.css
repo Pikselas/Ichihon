@@ -140,8 +140,8 @@ body
 .connection_status_panel
 {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: calc(50% - 75px);
+    left: calc(50% - 75px);
 
     width: 150px;
     height: 125px;
