@@ -60,7 +60,9 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
         ShowConnectionsButton.onclick = ()=>
         {
             let panel = CreateConnectionStatusPanel(this.node_connector);
+            panel.style.scale = "0";
             this.panel.appendChild(panel);
+            setTimeout(()=>{panel.style.scale = "1"},10);
         };
 
         let CloseButton = document.createElement("img");

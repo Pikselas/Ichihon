@@ -156,6 +156,8 @@ body
     /* border: 2px solid rgb(74, 0, 144); */
     padding: 10px;
     box-shadow:0px 0px 150px #4401ff;
+
+    transition: scale 0.2s ease-in-out;
 }
 
 .connection_status_panel::before

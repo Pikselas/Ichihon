@@ -211,7 +211,8 @@ function CreateConnectionStatusPanel(connection_object: NodeConnector)
 
     close_img.onclick = ()=>
     {
-        panel.remove();
+        panel.style.scale = "0";
+        setTimeout(()=>{panel.remove()},200);
     }
 
     connection_object.getConnections().forEach((connection,indx)=>
@@ -247,6 +248,6 @@ function CreateConnectionStatusPanel(connection_object: NodeConnector)
 
     panel.appendChild(tool_bar);
     panel.appendChild(connection_panel);
-    return panel;
 
+    return panel;
 }

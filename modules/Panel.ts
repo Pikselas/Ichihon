@@ -73,7 +73,9 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
       connection_status_tool.OnClick = ()=>
       {
          let connection_status_panel = CreateConnectionStatusPanel(this.node_connector);
+         connection_status_panel.style.scale = "0";
          this.panel.appendChild(connection_status_panel);
+         setTimeout(()=>{connection_status_panel.style.scale = "1"},10);
       }
 
       let close_tool = new Tool("./media/close-small.png","Close");
