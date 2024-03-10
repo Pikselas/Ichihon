@@ -71,7 +71,9 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
         {
             this.mutation_observer.disconnect();
             this.node_connector.remove();
-            this.panel.remove();
+            
+            this.panel.style.scale  = "0";
+            setTimeout(()=>{this.panel.remove()},200);
         };
 
         ToolsSection.appendChild(UpDirButton);

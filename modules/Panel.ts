@@ -68,7 +68,6 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
          }
       }
 
-      let add_tool = new Tool("./media/plus-small.png","Add Item");
       let connection_status_tool = new Tool("./media/connect-small.png","Connection Status");
 
       connection_status_tool.OnClick = ()=>
@@ -77,10 +76,17 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
          this.panel.appendChild(connection_status_panel);
       }
 
-      this.toolbar.addTool(add_tool);
+      let close_tool = new Tool("./media/close-small.png","Close");
+
+      close_tool.OnClick = ()=>
+      {
+         this.node_connector.remove();
+         this.panel.style.scale  = "0";
+         setTimeout(()=>{this.panel.remove()},200);
+      }
+
       this.toolbar.addTool(connection_status_tool);
-      this.toolbar.addTool(new Tool("./media/color.png","Change Color"));
-      this.toolbar.addTool(new Tool("./media/plus-small.png","Add Item"));
+      this.toolbar.addTool(close_tool);
    }
    public addMediaObject(media: MediaObject): void
    {
