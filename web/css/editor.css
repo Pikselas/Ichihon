@@ -252,3 +252,52 @@ body
     position: absolute;
     right: 10px;
 }
+
+.editor_toolbar
+{
+    background: linear-gradient(45deg, #d48eff, #620f9e);
+}
+
+.editor_toolbar .tool:hover
+{   
+    filter: none;
+}
+
+.editor_toolbar .tool_image_collection:hover
+{
+    animation: rotate_image_collection 1s cubic-bezier(.81,.8,0,-0.51) 1;
+}
+
+@keyframes rotate_image_collection
+{
+    from
+    {
+        transform: rotate(0deg);
+    }
+    to
+    {
+        transform: rotate(360deg);
+    }
+}
+
+.editor_toolbar .tool_explore_files:hover
+{
+    /* transform-origin:bottom; */
+    animation: tilt_file_explorer 0.5s cubic-bezier(.75,-0.63,.16,-0.55) 1;
+}
+
+@keyframes tilt_file_explorer
+{
+    0%
+    {
+        transform: rotate(0deg);
+    }
+    50%
+    {
+        transform: rotate(15deg);
+    }
+    100%
+    {
+        transform: rotate(-5deg);
+    }
+}

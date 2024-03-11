@@ -1,4 +1,4 @@
-class Toolbar extends Panel
+class Toolbar extends EditorViewPanel
 {
    constructor()
    {

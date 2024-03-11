@@ -51,4 +51,20 @@ function SetUpEditor(html_area : HTMLElement)
     editor.bindNodeConnector(pan_1, node_2);
     editor.bindNodeConnector(pan_2, node_3);
 
+    let toolbar = new Toolbar();
+    toolbar.setWidth(100);
+    toolbar.setHeight(400);
+    toolbar.getPanel().classList.add("editor_toolbar");
+    new DraggAble(toolbar);
+
+    let tool_photo_collections = new Tool("./media/photo-collections.png","Create Image Collection");
+    tool_photo_collections.getTool().classList.add("tool_image_collection");
+
+    let tool_file_explorer = new Tool("./media/explore-files.png","Explore Files");
+    tool_file_explorer.getTool().classList.add("tool_explore_files");
+
+    toolbar.addTool(tool_photo_collections);
+    toolbar.addTool(tool_file_explorer);
+
+    editor.addPanel(toolbar);
 }
