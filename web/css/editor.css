@@ -256,6 +256,7 @@ body
 .editor_toolbar
 {
     background: linear-gradient(45deg, #d48eff, #620f9e);
+    position: fixed;
 }
 
 .editor_toolbar .tool:hover

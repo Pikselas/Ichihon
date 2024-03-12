@@ -6,16 +6,57 @@ let node_3 = null;
 function SetUpEditor(html_area : HTMLElement)
 {
     html_area.appendChild(LinkLine.link_line_svg);
-
     const editor = new Editor(html_area);
+
+    let toolbar = new Toolbar();
+    toolbar.setWidth(100);
+    toolbar.setHeight(400);
+    toolbar.getPanel().classList.add("editor_toolbar");
+
+    let tool_photo_collections = new Tool("./media/photo-collections.png","Create Image Collection");
+    tool_photo_collections.getTool().classList.add("tool_image_collection");
+
+    tool_photo_collections.OnClick = ()=>
+    {
+        let panel = new ImageCollectionPanel();
+        new DraggAble(panel);
+        editor.addPanel(panel);
+        editor.bindNodeConnector(panel, new NodeConnector(panel));
+
+        panel.setPosition(html_area.scrollLeft, html_area.scrollTop);
+    }
+
+    let tool_file_explorer = new Tool("./media/explore-files.png","Explore Files");
+    tool_file_explorer.getTool().classList.add("tool_explore_files");
+
+    tool_file_explorer.OnClick = ()=>
+    {
+        let panel = new FileExplorer(new FileLister("/get_file_list","D:"));
+        new DraggAble(panel);
+        editor.addPanel(panel);
+        editor.bindNodeConnector(panel, new NodeConnector(panel));
+        panel.setPosition(html_area.scrollLeft , html_area.scrollTop);
+    }
+
+    toolbar.addTool(tool_photo_collections);
+    toolbar.addTool(tool_file_explorer);
+
+    editor.addPanel(toolbar);
+
+    let toolbar_draggable = new DraggAble(toolbar);
     let drop_area = new DropArea(html_area);
+    
     drop_area.DragOverHandler = (ev: DragEvent)=>
     {
         ev.preventDefault();
         let current_drag_panel = DraggAble.GetCurrentDraggable();
-        if (current_drag_panel != null)
+        if (current_drag_panel != null && current_drag_panel != toolbar_draggable)
         {
             current_drag_panel.dragTo(html_area.scrollLeft + ev.x, html_area.scrollTop +  ev.y);
+        }
+        else if (current_drag_panel == toolbar_draggable)
+        {
+            current_drag_panel.dragTo(ev.x,ev.y);
         }
     }
 
@@ -28,43 +69,4 @@ function SetUpEditor(html_area : HTMLElement)
         }
     }
 
-    let ex =  new FileExplorer(new FileLister("/get_file_list","D:"));
-    let pan_1 = new ImageCollectionPanel();
-    let pan_2 = new ImageCollectionPanel();
-
-    pan_1.addMediaObject(new ImageObject("///D:/CoderWallp/pKZ96nf.jpg"));
-    pan_1.addMediaObject(new ImageObject("///D:/CoderWallp/prI6x2c.jpg"));
-    
-    node_1 = new NodeConnector(ex);
-    node_2 = new NodeConnector(pan_1);
-    node_3 = new NodeConnector(pan_2);
-
-    new DraggAble(ex);
-    new DraggAble(pan_1);
-    new DraggAble(pan_2);
-
-    editor.addPanel(ex);
-    editor.addPanel(pan_1);
-    editor.addPanel(pan_2);
-
-    editor.bindNodeConnector(ex, node_1);
-    editor.bindNodeConnector(pan_1, node_2);
-    editor.bindNodeConnector(pan_2, node_3);
-
-    let toolbar = new Toolbar();
-    toolbar.setWidth(100);
-    toolbar.setHeight(400);
-    toolbar.getPanel().classList.add("editor_toolbar");
-    new DraggAble(toolbar);
-
-    let tool_photo_collections = new Tool("./media/photo-collections.png","Create Image Collection");
-    tool_photo_collections.getTool().classList.add("tool_image_collection");
-
-    let tool_file_explorer = new Tool("./media/explore-files.png","Explore Files");
-    tool_file_explorer.getTool().classList.add("tool_explore_files");
-
-    toolbar.addTool(tool_photo_collections);
-    toolbar.addTool(tool_file_explorer);
-
-    editor.addPanel(toolbar);
 }
