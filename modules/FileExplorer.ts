@@ -41,6 +41,7 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
             {
                 selected_files.push(this.file_list_provider.getCurrentDir() + '/' + select_box.parentElement.title);
             });
+            this.node_connector.reflectChange({ TYPE:NODE_CONNECTION_CHANGE.FILE_SELECTION , CHANGE:selected_files});
         }
 
         let SelectionButton = document.createElement("img");
@@ -163,12 +164,8 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
     }
 
     public OnConnect(connector: NodeIConnectable): void 
-    {
-        console.log(connector);    
-    }
+    {}
 
     public OnChangeDetected(change: any): void 
-    {
-        console.log(change);
-    }
+    {}
 }

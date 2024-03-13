@@ -1,8 +1,3 @@
-
-let node_1 = null;
-let node_2 = null;
-let node_3 = null;
-
 function SetUpEditor(html_area : HTMLElement)
 {
     html_area.appendChild(LinkLine.link_line_svg);

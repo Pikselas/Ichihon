@@ -1,9 +1,19 @@
+enum NODE_CONNECTION_CHANGE 
+{
+    FILE_SELECTION,
+    COLLECTION_SCROLL
+}
+
+type FILE_SELECTION_CHANGE = { TYPE: NODE_CONNECTION_CHANGE.FILE_SELECTION, CHANGE: Array<string> };
+type COLLECTION_CHANGE = { TYPE: NODE_CONNECTION_CHANGE.COLLECTION_SCROLL, CHANGE: { index: number, object: ImageObject } };
+
+type CONNECTION_CHANGE = FILE_SELECTION_CHANGE | COLLECTION_CHANGE;
 
 interface NodeIConnectable
 {
     node_connector: NodeConnector;
     OnConnect(connector:NodeIConnectable): void
-    OnChangeDetected(change: any): void
+    OnChangeDetected(change: CONNECTION_CHANGE): void
 }
 
 class NodeObject extends Panel
@@ -186,7 +196,7 @@ class NodeConnector
         this.node.getPanel().remove();
     }
 
-    public reflectChange(change: any)
+    public reflectChange(change: CONNECTION_CHANGE)
     {
         this.connections.forEach((connection)=>
         {

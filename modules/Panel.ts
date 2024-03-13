@@ -64,7 +64,7 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
 
          if (this.node_connector != null)
          {
-            this.node_connector.reflectChange({ "scrolled_to" : this.media_objects[most_visible_media_index] });
+            this.node_connector.reflectChange({ TYPE:NODE_CONNECTION_CHANGE.COLLECTION_SCROLL , CHANGE: {index:most_visible_media_index , object:this.media_objects[most_visible_media_index]}});
          }
       }
 
@@ -90,7 +90,7 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
       this.toolbar.addTool(connection_status_tool);
       this.toolbar.addTool(close_tool);
    }
-   public addMediaObject(media: MediaObject): void
+   public addMediaObject(media: ImageObject): void
    {
       this.media_objects.push(media);
       this.media_container.appendChild(media.getMediaObject());
@@ -101,8 +101,16 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
       console.log(connector);
    }
 
-   public OnChangeDetected(change: any): void 
+   public OnChangeDetected(change: CONNECTION_CHANGE): void 
    {
-      console.log(change);
+      switch(change.TYPE)
+      {
+         case NODE_CONNECTION_CHANGE.FILE_SELECTION:
+            change.CHANGE.forEach(media =>
+            {
+               this.addMediaObject(new ImageObject("get_file/" + media));
+            });
+            break;
+      }
    }
 }
