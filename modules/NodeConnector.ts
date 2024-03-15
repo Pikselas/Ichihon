@@ -90,7 +90,7 @@ class NodeConnector
 
         this.node.getPanel().parentElement.appendChild(this.temp_node.getPanel());
 
-        this.temp_link_line = new LinkLine(this.node.getPanel(), this.temp_node.getPanel(), this.node.getPanel().parentElement);
+        this.temp_link_line = new LinkLine(this.node.getPanel(), this.temp_node.getPanel());
 
         this.connections.forEach((connection)=>
         {
@@ -113,34 +113,13 @@ class NodeConnector
         this.node.getPanel().style.zIndex = "0";
         if(this.temp_node != null)
         {
-            this.draggable.resetPosition();
-            this.drop_area = new DropArea(this.node.getPanel());
-
-            this.connections.forEach((connection)=>
-            {
-                let l1 = connection.link_line.getLinkable1();
-                let l2 = connection.link_line.getLinkable2();
-
-                if(l1 == this.temp_node.getPanel())
-                {
-                    connection.link_line.setLinkable1(this.node.getPanel());
-                }
-                else if(l2 == this.temp_node.getPanel())
-                {
-                    connection.link_line.setLinkable2(this.node.getPanel());
-                }
-            });
-
             this.temp_link_line.remove();
             this.temp_node.getPanel().remove();
 
             this.temp_node = null;
             this.temp_link_line = null;
         }
-        else
-        {
-            this.setup_node();
-        }
+        this.setup_node();
     }
 
     private setup_node()
@@ -161,7 +140,7 @@ class NodeConnector
 
     public connectWith(connector: NodeConnector)
     {
-        let link_line = new LinkLine(this.node.getPanel(), connector.node.getPanel(), this.node.getPanel().parentElement);
+        let link_line = new LinkLine(this.node.getPanel(), connector.node.getPanel());
 
         this.connections.push({ observer:connector, link_line: link_line });
         connector.connections.push({ observer:this , link_line:link_line });
