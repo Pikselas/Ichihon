@@ -42,7 +42,6 @@ class NodeConnector
     private connections: Array<NodeConnectionObject> = new Array<NodeConnectionObject>();
 
     private connector_object: NodeIConnectable;
-    private change_observer: MutationObserver = null;
 
     constructor(connector: NodeIConnectable)
     {
@@ -72,14 +71,7 @@ class NodeConnector
             node.node_connector.temp_node = null;
             node.node_connector.temp_link_line = null;
 
-            let link_line = new LinkLine(this.node.getPanel(), node.node_connector.node.getPanel(), this.node.getPanel().parentElement);
-
-            this.connections.push({ observer:node.node_connector, link_line: link_line });
-            node.node_connector.connections.push({ observer:this , link_line:link_line });
-
-            this.connector_object.OnConnect(node.node_connector.connector_object);
-            node.node_connector.connector_object.OnConnect(this.connector_object);
-            
+            this.connectWith(node.node_connector);
         }
     }
 
@@ -165,6 +157,17 @@ class NodeConnector
     public getNode(): Panel
     {
         return this.node;
+    }
+
+    public connectWith(connector: NodeConnector)
+    {
+        let link_line = new LinkLine(this.node.getPanel(), connector.node.getPanel(), this.node.getPanel().parentElement);
+
+        this.connections.push({ observer:connector, link_line: link_line });
+        connector.connections.push({ observer:this , link_line:link_line });
+
+        this.connector_object.OnConnect(connector.connector_object);
+        connector.connector_object.OnConnect(this.connector_object);
     }
 
     public getConnections(): Array<NodeConnectionObject>
