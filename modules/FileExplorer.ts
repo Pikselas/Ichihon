@@ -5,6 +5,7 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
     private selection_button: HTMLImageElement;
 
     node_connector: NodeConnector; 
+    last_change_event_by: NodeIConnectable;
 
     constructor(file_lister: FileLister)
     {
@@ -72,11 +73,8 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
 
         CloseButton.onclick = ()=>
         {
-            this.mutation_observer.disconnect();
             this.node_connector.remove();
-            
-            this.panel.style.scale  = "0";
-            setTimeout(()=>{this.panel.remove()},200);
+            this.close();
         };
 
         ToolsSection.appendChild(UpDirButton);

@@ -32,6 +32,12 @@ class Panel
 class EditorViewPanel extends Panel 
 {
    public mutation_observer: MutationObserver;
+   public close()
+   {
+      this.mutation_observer.disconnect()
+      this.panel.style.scale  = "0";
+      setTimeout(()=>{this.panel.remove()},200);
+   }
 }
 
 class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
@@ -42,12 +48,11 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
    private media_objects: MediaObject[] = [];
 
    node_connector: NodeConnector;
+   last_change_event_by: NodeIConnectable;
 
    constructor()
    {
       super();  
-
-      this.node_connector = new NodeConnector(this);
 
       this.panel.className = "panel";
 
@@ -64,7 +69,7 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
 
          if (this.node_connector != null)
          {
-            this.node_connector.reflectChange({ TYPE:NODE_CONNECTION_CHANGE.COLLECTION_SCROLL , CHANGE: {index:most_visible_media_index , object:this.media_objects[most_visible_media_index]}});
+            this.node_connector.reflectChange({ TYPE:NODE_CONNECTION_CHANGE.COLLECTION_SCROLL , CHANGE: {index:most_visible_media_index , length:this.media_objects.length , object:this.media_objects[most_visible_media_index]}});
          }
       }
 
@@ -83,8 +88,7 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
       close_tool.OnClick = ()=>
       {
          this.node_connector.remove();
-         this.panel.style.scale  = "0";
-         setTimeout(()=>{this.panel.remove()},200);
+         this.close();
       }
 
       this.toolbar.addTool(connection_status_tool);
@@ -110,7 +114,11 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
             {
                this.addMediaObject(new ImageObject("get_file/" + media));
             });
-            break;
+         break;
+         case NODE_CONNECTION_CHANGE.COLLECTION_SCROLL:
+            let indx = Math.floor((this.media_objects.length * change.CHANGE.index) / change.CHANGE.length);
+            this.media_container.scrollTop = this.media_objects[indx].getMediaObject().offsetTop;
+         break;
       }
    }
 }

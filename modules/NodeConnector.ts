@@ -5,13 +5,14 @@ enum NODE_CONNECTION_CHANGE
 }
 
 type FILE_SELECTION_CHANGE = { TYPE: NODE_CONNECTION_CHANGE.FILE_SELECTION, CHANGE: Array<string> };
-type COLLECTION_CHANGE = { TYPE: NODE_CONNECTION_CHANGE.COLLECTION_SCROLL, CHANGE: { index: number, object: ImageObject } };
+type COLLECTION_CHANGE = { TYPE: NODE_CONNECTION_CHANGE.COLLECTION_SCROLL, CHANGE: { index: number, length:number ,object: ImageObject } };
 
 type CONNECTION_CHANGE = FILE_SELECTION_CHANGE | COLLECTION_CHANGE;
 
 interface NodeIConnectable
 {
     node_connector: NodeConnector;
+    last_change_event_by: NodeIConnectable;
     OnConnect(connector:NodeIConnectable): void
     OnChangeDetected(change: CONNECTION_CHANGE): void
 }
@@ -182,8 +183,17 @@ class NodeConnector
     {
         this.connections.forEach((connection)=>
         {
-            connection.observer.connector_object.OnChangeDetected(change);
+            if(connection.observer.connector_object != this.connector_object.last_change_event_by)
+            {
+                connection.observer.connector_object.OnChangeDetected(change);
+                connection.observer.connector_object.last_change_event_by = this.connector_object;
+            }
+            else
+            {
+                console.log("FOUND" , connection.observer.connector_object);
+            }
         });
+        this.connector_object.last_change_event_by = null;
     }
 }
 
