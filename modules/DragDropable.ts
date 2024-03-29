@@ -110,6 +110,11 @@ class DraggAble
          event.dataTransfer.setDragImage(new Image(), 0, 0);
       });
 
+      target.getPanel().addEventListener("dragend", (event: DragEvent)=>
+      {
+         DraggAble.current_draggable = null;
+      });
+
       // target.getPanel().addEventListener("drag", (event: DragEvent)=>
       // {
          

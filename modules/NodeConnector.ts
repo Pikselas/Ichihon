@@ -17,15 +17,24 @@ interface NodeIConnectable
     OnChangeDetected(change: CONNECTION_CHANGE): void
 }
 
-class NodeObject extends Panel
+class NodeObject
 {
     public node_connector: NodeConnector = null;
+    private panel: HTMLDivElement = null;
     constructor()
     {
-        super();
-
+        this.panel = document.createElement("div");
         this.panel.className = "connector_node";
     }
+    public getPanel(): HTMLDivElement
+    {
+        return this.panel;
+    }
+    public setPosition(x: number, y: number): void
+   {
+      this.panel.style.left = x - 5 + "px";
+      this.panel.style.top = y - 5 + "px";
+   }
 }
 
 type NodeConnectionObject = { observer: NodeConnector , link_line: LinkLine };
@@ -37,18 +46,25 @@ class NodeConnector
     private temp_link_line: LinkLine = null;
     private temp_node: NodeObject = null;
 
-    private draggable: DraggAble = null;
     private node: NodeObject = null;
 
     private connections: Array<NodeConnectionObject> = new Array<NodeConnectionObject>();
 
     private connector_object: NodeIConnectable;
 
+    private static active_node_object: NodeObject = null;
+
     constructor(connector: NodeIConnectable)
     {
         this.connector_object = connector;
         this.node = new NodeObject();
-        this.setup_node();
+        this.drop_area = new DropArea(this.node.getPanel());
+        this.node.getPanel().draggable = true;
+
+        this.node.getPanel().addEventListener("dragstart", this.drag_start_handler.bind(this));
+        this.node.getPanel().addEventListener("dragend", this.drag_end_handler.bind(this));
+
+        this.drop_area.DropHandler = this.drop_handler.bind(this);
 
         this.connector_object.node_connector = this;
     }
@@ -56,85 +72,48 @@ class NodeConnector
     private drop_handler(ev: DragEvent)
     {
         ev.preventDefault();
-        let current_drag_panel = DraggAble.GetCurrentDraggable();
-        if (current_drag_panel != null && current_drag_panel.getTarget() instanceof NodeObject)
+        let node = NodeConnector.active_node_object;
+        if (node != null)
         {
-
             ev.preventDefault();
-            ev.stopPropagation();
-
-            let node = current_drag_panel.getTarget() as NodeObject;
-
-            node.node_connector.temp_link_line.remove();
-            node.getPanel().remove();
-
-            node.node_connector.node = node.node_connector.temp_node;
-            node.node_connector.temp_node = null;
-            node.node_connector.temp_link_line = null;
-
             this.connectWith(node.node_connector);
         }
     }
 
     private drag_start_handler(ev: DragEvent)
     {
-        this.drop_area.clear();
-        this.drop_area = null;
-
-        this.node.node_connector = this;
-
-        this.node.getPanel().style.zIndex = "-1";
+        ev.dataTransfer.setDragImage(new Image() , 0 , 0);
         this.temp_node = new NodeObject();
+        this.temp_node.node_connector = this;
+        this.temp_node.getPanel().style.zIndex = "-1";
 
         this.temp_node.getPanel().style.left = this.node.getPanel().offsetLeft + "px";
         this.temp_node.getPanel().style.top = this.node.getPanel().offsetTop + "px";
 
         this.node.getPanel().parentElement.appendChild(this.temp_node.getPanel());
 
+        NodeConnector.active_node_object = this.temp_node;
+
         this.temp_link_line = new LinkLine(this.node.getPanel(), this.temp_node.getPanel());
-
-        this.connections.forEach((connection)=>
-        {
-            let l1 = connection.link_line.getLinkable1();
-            let l2 = connection.link_line.getLinkable2();
-
-            if(l1 == this.node.getPanel())
-            {
-                connection.link_line.setLinkable1(this.temp_node.getPanel());
-            }
-            else if(l2 == this.node.getPanel())
-            {
-                connection.link_line.setLinkable2(this.temp_node.getPanel());
-            }
-        });
     }
 
     private drag_end_handler(ev: DragEvent)
     {
-        this.node.getPanel().style.zIndex = "0";
-        if(this.temp_node != null)
-        {
-            this.temp_link_line.remove();
-            this.temp_node.getPanel().remove();
+        NodeConnector.active_node_object = null;
+        
+        this.temp_node.getPanel().remove();
+        this.temp_node = null;
 
-            this.temp_node = null;
-            this.temp_link_line = null;
-        }
-        this.setup_node();
+        this.temp_link_line.remove();
+        this.temp_link_line = null;
     }
 
-    private setup_node()
+    public static GetActiveNodeObject(): NodeObject
     {
-        this.draggable = new DraggAble(this.node);
-        this.drop_area = new DropArea(this.node.getPanel());
-
-        this.node.getPanel().addEventListener("dragstart", this.drag_start_handler.bind(this));
-        this.node.getPanel().addEventListener("dragend", this.drag_end_handler.bind(this));
-
-        this.drop_area.DropHandler = this.drop_handler.bind(this);
+        return NodeConnector.active_node_object;
     }
 
-    public getNode(): Panel
+    public getNode(): NodeObject
     {
         return this.node;
     }
