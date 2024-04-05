@@ -48,7 +48,7 @@ class ImageCollectionPanel extends EditorViewPanel implements NodeIConnectable
    private media_objects: MediaObject[] = [];
 
    node_connector: NodeConnector;
-   last_change_event_by: NodeIConnectable;
+   last_change_event: LAST_CHANGE_EVENT_TYPE;
 
    constructor()
    {

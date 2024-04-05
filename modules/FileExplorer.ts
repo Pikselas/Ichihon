@@ -5,7 +5,7 @@ class FileExplorer extends EditorViewPanel implements NodeIConnectable
     private selection_button: HTMLImageElement;
 
     node_connector: NodeConnector; 
-    last_change_event_by: NodeIConnectable;
+    last_change_event: LAST_CHANGE_EVENT_TYPE
 
     constructor(file_lister: FileLister)
     {

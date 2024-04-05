@@ -9,10 +9,12 @@ type COLLECTION_CHANGE = { TYPE: NODE_CONNECTION_CHANGE.COLLECTION_SCROLL, CHANG
 
 type CONNECTION_CHANGE = FILE_SELECTION_CHANGE | COLLECTION_CHANGE;
 
+type LAST_CHANGE_EVENT_TYPE = { type: NODE_CONNECTION_CHANGE, by: NodeIConnectable };
+
 interface NodeIConnectable
 {
     node_connector: NodeConnector;
-    last_change_event_by: NodeIConnectable;
+    last_change_event: LAST_CHANGE_EVENT_TYPE;
     OnConnect(connector:NodeIConnectable): void
     OnChangeDetected(change: CONNECTION_CHANGE): void
 }
@@ -118,6 +120,11 @@ class NodeConnector
         return this.node;
     }
 
+    public getConnectionObject(): NodeIConnectable
+    {
+        return this.connector_object;
+    }
+
     public connectWith(connector: NodeConnector)
     {
         let link_line = new LinkLine(this.node.getPanel(), connector.node.getPanel());
@@ -162,17 +169,23 @@ class NodeConnector
     {
         this.connections.forEach((connection)=>
         {
-            if(connection.observer.connector_object != this.connector_object.last_change_event_by)
+
+            if(this.connector_object.last_change_event != null)
             {
-                connection.observer.connector_object.OnChangeDetected(change);
-                connection.observer.connector_object.last_change_event_by = this.connector_object;
+                if(
+                    this.connector_object.last_change_event.type == change.TYPE 
+                    && 
+                    this.connector_object.last_change_event.by == connection.observer.connector_object
+                  )
+                {
+                    return;
+                }
             }
-            else
-            {
-                console.log("FOUND" , connection.observer.connector_object);
-            }
+
+            connection.observer.connector_object.OnChangeDetected(change);
+            connection.observer.connector_object.last_change_event = { type: change.TYPE, by: this.connector_object };
         });
-        this.connector_object.last_change_event_by = null;
+        this.connector_object.last_change_event = null;
     }
 }
 

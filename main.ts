@@ -18,7 +18,7 @@ function SetUpEditor(html_area : HTMLElement)
         editor.addPanel(panel);
         editor.bindNodeConnector(panel, new NodeConnector(panel));
 
-        panel.setPosition(html_area.scrollLeft, html_area.scrollTop);
+        //panel.setPosition(html_area.scrollLeft, html_area.scrollTop);
     }
 
     let tool_file_explorer = new Tool("./media/explore-files.png","Explore Files");
@@ -45,9 +45,14 @@ function SetUpEditor(html_area : HTMLElement)
     {
         ev.preventDefault();
         let current_drag_panel = DraggAble.GetCurrentDraggable();
+        let current_drag_node = NodeConnector.GetActiveNodeObject();
         if (current_drag_panel != null && current_drag_panel != toolbar_draggable)
         {
             current_drag_panel.dragTo(html_area.scrollLeft + ev.x, html_area.scrollTop +  ev.y);
+        }
+        else if (current_drag_node != null)
+        {
+            current_drag_node.setPosition(html_area.scrollLeft + ev.x, html_area.scrollTop + ev.y);
         }
         else if (current_drag_panel == toolbar_draggable)
         {
